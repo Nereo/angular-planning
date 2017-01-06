@@ -1,0 +1,21 @@
+<div class="planning-wrapper">    
+    <div scroll-detect on-scroll-begin="" on-scroll-end="" cells-class-to-follow="planning-month" class="planning-scroller">
+        <table class="planning-table">
+            <thead>
+                <tr>
+                    <th class="planning-sticky-left"></th>
+                    <th class="planning-month" ng-repeat="month in dates.months track by $index" ng-attr-colspan="{{ month.nbDaysDisplayed }}">
+                        <span ng-bind="month.month.format('MMMM YYYY')"></span>
+                    </th>
+                </tr>
+                <tr>
+                    <th class="planning-sticky-left"></th>
+                    <th ng-repeat="day in dates.days track by $index" ng-bind="day.format('DD')"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr angular-planning-resource-row ng-repeat="resource in resources" resource="resource" dates="dates" ng-class="{'planning-group-row': resource.group}" ng-show="resource.show"></tr>
+            </tbody>
+        </table>
+    </div>
+</div>

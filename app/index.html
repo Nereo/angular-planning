@@ -12,6 +12,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/planning.css">
     <!-- endbuild -->
   </head>
   <body ng-app="angularPlanningApp">
@@ -80,6 +81,8 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -87,6 +90,9 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/directives/angularPlanning.js"></script>
+        <script src="scripts/directives/angularPlanningResourceRow.js"></script>
+        <script src="scripts/directives/scrollDetect.js"></script>
         <!-- endbuild -->
 </body>
 </html>

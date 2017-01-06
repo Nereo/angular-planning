@@ -1,5 +1,7 @@
 'use strict';
 
+var moment, _;
+
 /**
  * @ngdoc overview
  * @name angularPlanningApp
@@ -32,4 +34,7 @@ angular
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+  .constant('moment', moment)
+  .constant('_', _)
+;
