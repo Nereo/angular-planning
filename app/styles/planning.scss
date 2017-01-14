@@ -1,20 +1,13 @@
 $planning-row-height: 20px;
 $planning-cell-width: 20px;
-$planning-left-column-width: 150px;
 $planning-border-color: lightgrey;
-
-.planning-wrapper {
-    position: relative;
-}
-
-.planning-scroller {
-    margin-left:$planning-left-column-width + 20;
-    overflow-x: scroll;
-    overflow-y: visible;
-}
+$planning-today-color: red;
 
 .planning-table {
+    table-layout: fixed;
     margin: 0;
+    font-size: 10px;
+    width: 100%;
 
     tr, td, th {
         height: $planning-row-height;
@@ -23,18 +16,36 @@ $planning-border-color: lightgrey;
     }
 
     thead {
+        display: block;
+        width: 100%;
+
         tr {
+
             th {
                 min-width: $planning-cell-width;
                 padding: 0;
-                font-size: 10px;
                 text-align:center;
                 vertical-align: middle;
 
+                /* Remove the border on the top left empty cells */
                 &:first-child {
+                    border: 0;
                 }
             }
+
+            /* Remove the border on the top left empty cells */
+            &:first-child, &:first-child+tr {
+                border: 0;
+            }
         }
+    }
+
+    tbody {
+        display: block;
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100px;
     }
 
     tr.planning-group-row {
@@ -49,7 +60,24 @@ $planning-border-color: lightgrey;
         }
     }
 
+    th.planning-resources {
+        display: table;
+        table-layout: fixed;
+        min-width: 25%;
+        width: 100%;
+        border: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        .planning-resource-name {
+            padding-left: 10px;
+        }
+    }
+
     td {
+        min-width: $planning-cell-width;
+
         &.planning-day-cell {
             padding: 0 0 0 0;
 
@@ -63,18 +91,11 @@ $planning-border-color: lightgrey;
         }
     }
 
-    .planning-sticky-left {
-        left: 0;
-        position: absolute;
-        top: auto;
-        width: $planning-left-column-width;
-        font-size: 10px;
-        vertical-align: middle;
-        padding: 0 0 0 5px;
-    }
-
     .planning-month {
         text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         span {
             position: relative;
             display: inline-block;
@@ -82,10 +103,8 @@ $planning-border-color: lightgrey;
         }
     }
 
-    .planning-resource-name {
-        position: relative;
-        left: 0px;
-        display: inline-block;
+    th.planning-today-cell {
+        background-color: $planning-today-color;
     }
 
     .planning-group-toggle {
@@ -99,10 +118,10 @@ $planning-border-color: lightgrey;
         height: 100%;
 
         i {
-            font-size: 0.5em;
+            font-size: 8px;
             position: relative;
             left: 2px;
-            top: 2px;
+            top: 4px;
         }
     }
 }

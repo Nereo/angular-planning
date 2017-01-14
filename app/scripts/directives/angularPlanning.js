@@ -8,18 +8,12 @@ angular.module('angularPlanningApp')
         scope: {
             'getResources': '&',
             'currentDate': '=',
-            'leapSize': '=',
             'onDayHover': '&?',
             'onDayClick': '&?',
             'onEventClick': '&?'
         },
         templateUrl: 'views/angular-planning.html',
-        controller: ['$scope', '$q', '_', function PlanningController($scope, $q, _) {
-            $scope.dates = {
-                days: [],
-                months: []
-            };
-
+        controller: ['$scope', '$q', 'moment', '_', function PlanningController($scope, $q, moment, _) {
             /* Toggle groups */
             function toggleVisibility(resource, show) {
                 for (var i = 0 ; i < $scope.resources.length ; i++) {
@@ -90,7 +84,7 @@ angular.module('angularPlanningApp')
                 });
             }
 
-            /* Display dates */
+            /* Dates utilities */
             function getMonthsOfDays(days) {
                 var months = [];
                 var lastMonth = {
@@ -113,6 +107,12 @@ angular.module('angularPlanningApp')
                 return months;
             }
 
+            function isToday(day) {
+                return day.isSame(moment(), 'day');
+            }
+            $scope.isToday = isToday;
+            this.isToday = isToday;
+
             this.isEndOfWeek = function(day) {
                 return day.clone().endOf('week').isSame(day, 'day');
             };
@@ -123,28 +123,6 @@ angular.module('angularPlanningApp')
 
             this.isAfternoonOnly = function(day, event) {
                 return event.morningIncluded === false && event.startsAt.isSame(day, 'day');
-            };
-
-            $scope.addDaysAfter = function() {
-                var currentDate = $scope.dates.days[$scope.dates.days.length - 1].clone();
-                for (var i = 0 ; i < $scope.leapSize ; i++) {
-                    currentDate.add(1, 'days');
-                    $scope.dates.days.push(currentDate.clone());
-                }
-                $scope.dates.months = getMonthsOfDays($scope.dates.days);
-
-                updatePlanning();
-            };
-
-            $scope.addDaysBefore = function() {
-                var currentDate = $scope.dates.days[0].clone();
-                for (var i = 0 ; i < $scope.leapSize ; i++) {
-                    currentDate.add(-1, 'days');
-                    $scope.dates.days.unshift(currentDate.clone());
-                }
-                $scope.dates.months = getMonthsOfDays($scope.dates.days);
-
-                updatePlanning();
             };
 
             /* Handle events */
@@ -170,17 +148,40 @@ angular.module('angularPlanningApp')
                 $event.stopPropagation();
             };
 
-            /* Init */
-            function initDate(date) {
-                $scope.dates.days = [date];
-                $scope.addDaysAfter();
-            }
-            $scope.$watch('currentDate', function(newValue, oldValue) {
+            /* Planning display */
+            $scope.dates = {
+                days: [],
+                months: []
+            };
+            $scope.nbDaysDisplayed = 0;
+            $scope.planningWidth = 0;
+
+            $scope.displayDates = function() {
+                var days = [];
+                var currentDate = $scope.currentDate.clone();
+                for (var i = 0 ; i < $scope.nbDaysDisplayed ; i++) {
+                    days.push(currentDate.clone());
+                    currentDate.add(1, 'days');
+                }
+                $scope.dates.days = days;
+                $scope.dates.months = getMonthsOfDays($scope.dates.days);
+                updatePlanning();
+            };
+
+            $scope.$watch('planningWidth', function(newValue, oldValue) {
                 if (newValue !== oldValue) {
-                    initDate(newValue);
+                    $scope.nbDaysDisplayed = _.floor((newValue * 0.75) / 20);
+                    $scope.displayDates();
                 }
             });
-            initDate($scope.currentDate);
+
+            $scope.$watch('currentDate', function(newValue, oldValue) {
+                if (newValue !== oldValue) {
+                    $scope.displayDates();
+                }
+            }, true);
+
+            $scope.displayDates();
         }]
     };
 });

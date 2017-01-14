@@ -11,9 +11,13 @@ angular.module('angularPlanningApp')
 
 .controller('MainCtrl', function ($scope, $q, $location, $anchorScroll, moment) {
     $scope.currentDate = moment();
-    $scope.scrollTo = function(id) {
-        $location.hash(id);
-        $anchorScroll();
+    $scope.addDays = function(nbDays) {
+        $scope.currentDate.add(nbDays, 'days');
+    };
+
+    $scope.goToDateString = '';
+    $scope.goToDate = function() {
+        $scope.currentDate = moment($scope.goToDateString, 'MM/DD/YYYY');
     };
 
     $scope.onDayHover = function(day, resource) {
