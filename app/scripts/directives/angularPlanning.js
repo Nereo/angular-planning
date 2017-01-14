@@ -8,6 +8,8 @@ angular.module('angularPlanningApp')
         scope: {
             'getResources': '&',
             'currentDate': '=',
+            'cellWidth': '=',
+            'planningResourcesColumnRatio': '=',
             'onDayHover': '&?',
             'onDayClick': '&?',
             'onEventClick': '&?'
@@ -170,7 +172,7 @@ angular.module('angularPlanningApp')
 
             $scope.$watch('planningWidth', function(newValue, oldValue) {
                 if (newValue !== oldValue) {
-                    $scope.nbDaysDisplayed = _.floor((newValue * 0.75) / 20);
+                    $scope.nbDaysDisplayed = _.floor((newValue * (1 - $scope.planningResourcesColumnRatio / 100)) / $scope.cellWidth);
                     $scope.displayDates();
                 }
             });
