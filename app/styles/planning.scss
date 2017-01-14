@@ -92,6 +92,7 @@ $planning-today-color: red;
     }
 
     .planning-month {
+        max-width: $planning-cell-width;
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
