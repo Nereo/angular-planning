@@ -1,5 +1,6 @@
 $planning-row-height: 20px;
 $planning-cell-width: 20px;
+$planning-body-height: 100px;
 $planning-border-color: lightgrey;
 $planning-today-color: red;
 
@@ -45,7 +46,7 @@ $planning-today-color: red;
         width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
-        height: 100px;
+        height: $planning-body-height;
     }
 
     tr.planning-group-row {
