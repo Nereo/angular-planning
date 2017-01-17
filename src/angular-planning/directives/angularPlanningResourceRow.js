@@ -8,6 +8,7 @@ angular.module('angularPlanningApp')
         restrict: 'A',
         scope: {
             resource: '=',
+            events: '=',
             dates: '='
         },
         link: function (scope, element, attrs, planningController) {

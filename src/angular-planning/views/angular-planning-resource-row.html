@@ -5,7 +5,7 @@
     </div>
 </th>
 <td class="planning-day-cell" ng-class="{'planning-day-cell-end-of-week': planningController.isEndOfWeek(day), 'planning-today-cell': planningController.isToday(day)}" ng-repeat="day in dates.days track by $index" ng-mouseover="planningController.onDayHover(day, resource)" ng-click="planningController.onDayClick(day, resource)">
-    <span class="planning-day-event" ng-repeat="event in resource.events" ng-if="day.isSameOrAfter(event.startsAt, 'day') && day.isSameOrBefore(event.endsAt, 'day')" ng-style="{
+    <span class="planning-day-event" ng-repeat="event in events" ng-if="day.isSameOrAfter(event.startsAt, 'day') && day.isSameOrBefore(event.endsAt, 'day')" ng-style="{
       background: planningController.isMorningOnly(day, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (planningController.isAfternoonOnly(day, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" ng-click="planningController.onEventClick($event, event, day, resource)">
         <i class="fa fa-hourglass-half" ng-if="event.pending"></i>
     </span>

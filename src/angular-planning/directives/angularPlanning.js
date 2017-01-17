@@ -6,7 +6,8 @@ angular.module('angularPlanningApp')
     return {
         restrict: 'E',
         scope: {
-            getResources: '&',
+            getEvents: '&',
+            resources: '=',
             currentDate: '=',
             cellWidth: '=',
             planningResourcesColumnRatio: '=',
@@ -49,14 +50,14 @@ angular.module('angularPlanningApp')
                 }
             }
 
-            /* Handle resourcees */
+            /* Handle resources */
             function flattenResources(resources) {
                 var _flattenResources = function (resources, parentGroupId) {
                     return _.flatMap(resources, function (resource) {
                         resource.parentGroup = parentGroupId;
-                        if (resource.childs) {
+                        if (resource.children) {
                             resource.group = true;
-                            return _.concat(resource, _flattenResources(resource.childs, resource.id));
+                            return _.concat(resource, _flattenResources(resource.children, resource.id));
                         }
                         resource.group = false;
                         return [resource];
@@ -65,23 +66,12 @@ angular.module('angularPlanningApp')
                 return _flattenResources(resources, null);
             }
 
-            function updateResources(minDate, maxDate) {
-                var resourceUpdatePromise = $q.defer();
-
-                $scope.getResources({minDate: minDate, maxDate: maxDate}).then(function (resources) {
-                    resourceUpdatePromise.resolve(flattenResources(resources));
-                });
-
-                return resourceUpdatePromise.promise;
-            }
-
             function updatePlanning() {
                 var minDate = $scope.dates.days[0];
                 var maxDate = $scope.dates.days[$scope.dates.days.length - 1];
-                var promise = updateResources(minDate, maxDate);
-                promise.then(function (resources) {
-                    $scope.resources = resources;
-                    initToggle();
+                var promise = $scope.getEvents(minDate, maxDate);
+                promise.then(function (events) {
+                    $scope.events = events;
                 });
             }
 
@@ -183,6 +173,8 @@ angular.module('angularPlanningApp')
                 }
             }, true);
 
+            $scope.resources = flattenResources($scope.resources);
+            initToggle();
             $scope.displayDates();
         }]
     };

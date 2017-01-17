@@ -22,53 +22,30 @@ angular
         vm.onEventClick = function (event, day, resource) {
             $log.log('Event clicked', event, day, resource);
         };
-        var resources = [
+
+        vm.resources = [
             {
                 id: 1,
                 name: 'TV Series',
                 open: true,
-                childs: [
+                children: [
                     {
                         id: 2,
                         name: 'Game of Thrones',
                         open: true,
-                        childs: [
+                        children: [
                             {
                                 id: 3,
                                 name: 'Stark',
                                 open: true,
-                                childs: [
+                                children: [
                                     {
                                         id: 4,
-                                        name: 'Jon Snow',
-                                        events: [
-                                            {
-                                                id: 123,
-                                                startsAt: moment(),
-                                                endsAt: moment().add(4, 'days'),
-                                                color: 'yellow',
-                                                pending: true,
-                                                morningIncluded: false,
-                                                afternoonIncluded: false,
-                                                priority: 1
-                                            }
-                                        ]
+                                        name: 'Jon Snow'
                                     },
                                     {
                                         id: 5,
-                                        name: 'Sansa Stark',
-                                        events: [
-                                            {
-                                                id: 123,
-                                                startsAt: moment().add(10, 'days'),
-                                                endsAt: moment().add(12, 'days'),
-                                                color: 'purple',
-                                                pending: false,
-                                                morningIncluded: true,
-                                                afternoonIncluded: true,
-                                                priority: 1
-                                            }
-                                        ]
+                                        name: 'Sansa Stark'
                                     }
                                 ]
                             },
@@ -76,7 +53,7 @@ angular
                                 id: 6,
                                 name: 'Targaryen',
                                 open: true,
-                                childs: [
+                                children: [
                                     {
                                         id: 7,
                                         name: 'Daenerys Targaryen',
@@ -90,27 +67,14 @@ angular
                         id: 7,
                         name: 'Big Bang Theory',
                         open: true,
-                        childs: [
+                        children: [
                             {
                                 id: 8,
-                                name: 'Sheldon Cooper',
-                                events: [
-                                    {
-                                        id: 123,
-                                        startsAt: moment().add(1, 'months'),
-                                        endsAt: moment().add(1, 'months').add(4, 'days'),
-                                        color: 'pink',
-                                        pending: false,
-                                        morningIncluded: true,
-                                        afternoonIncluded: true,
-                                        priority: 1
-                                    }
-                                ]
+                                name: 'Sheldon Cooper'
                             },
                             {
                                 id: 9,
-                                name: 'Howard Wolowitz',
-                                events: []
+                                name: 'Howard Wolowitz'
                             }
                         ]
                     }
@@ -120,22 +84,62 @@ angular
                 id: 10,
                 name: 'Movies',
                 open: false,
-                childs: [
+                children: [
                     {
                         id: 11,
-                        name: 'Han Solo',
-                        events: []
+                        name: 'Han Solo'
                     }
                 ]
             }
         ];
-        vm.getResources = function () {
-            var resourcesPromise = $q.defer();
+
+        var events = {
+            8: [
+                {
+                    id: 123,
+                    startsAt: moment().add(1, 'months'),
+                    endsAt: moment().add(1, 'months').add(4, 'days'),
+                    color: 'pink',
+                    pending: false,
+                    morningIncluded: true,
+                    afternoonIncluded: true,
+                    priority: 1
+                }
+            ],
+            5: [
+                {
+                    id: 123,
+                    startsAt: moment().add(10, 'days'),
+                    endsAt: moment().add(12, 'days'),
+                    color: 'purple',
+                    pending: false,
+                    morningIncluded: true,
+                    afternoonIncluded: true,
+                    priority: 1
+                }
+            ],
+            4: [
+                {
+                    id: 123,
+                    startsAt: moment(),
+                    endsAt: moment().add(4, 'days'),
+                    color: 'yellow',
+                    pending: true,
+                    morningIncluded: false,
+                    afternoonIncluded: false,
+                    priority: 1
+                }
+            ]
+
+        };
+
+        vm.getEvents = function () {
+            var eventsPromise = $q.defer();
 
             $timeout(function () {
-                resourcesPromise.resolve(resources);
+                eventsPromise.resolve(events);
             }, 1000);
 
-            return resourcesPromise.promise;
+            return eventsPromise.promise;
         };
     });
