@@ -38,6 +38,7 @@ function build() {
     .pipe(gulp.dest(conf.path.dist()))
     .pipe(uglify({preserveComments: uglifySaveLicense})).on('error', conf.errorHandler('Uglify'))
     .pipe(concat('angular-planning.min.js'))
+    .pipe(gulp.dest(conf.path.dist()))
     .pipe(jsFilter.restore)
     .pipe(cssFilter)
     .pipe(concat('angular-planning.css'))
