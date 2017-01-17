@@ -9,7 +9,11 @@
             </tr>
             <tr>
                 <th class="planning-resources"></th>
-                <th ng-repeat="day in dates.days track by $index" ng-bind="day.format('DD')" ng-class="{'planning-today-cell': isToday(day) }"></th>
+                <th ng-repeat="day in dates.days track by $index" ng-bind="day.format('DD')" ng-class="{'planning-today-cell': isToday(day), 'planning-day-cell-end-of-week': isEndOfWeek(day)}"></th>
+            </tr>
+            <tr ng-if="showDayOfWeek">
+                <th class="planning-resources"></th>
+                <th ng-repeat="day in dates.days track by $index" ng-bind="day.format('dd')" ng-class="{'planning-today-cell': isToday(day), 'planning-day-cell-end-of-week': isEndOfWeek(day)}"></th>
             </tr>
         </thead>
         <tbody>

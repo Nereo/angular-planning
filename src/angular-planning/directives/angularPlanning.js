@@ -10,6 +10,7 @@ angular.module('angularPlanningApp')
             currentDate: '=',
             cellWidth: '=',
             planningResourcesColumnRatio: '=',
+            showDayOfWeek: '=',
             onDayHover: '&?',
             onDayClick: '&?',
             onEventClick: '&?'
@@ -112,9 +113,11 @@ angular.module('angularPlanningApp')
             $scope.isToday = isToday;
             this.isToday = isToday;
 
-            this.isEndOfWeek = function (day) {
+            function isEndOfWeek(day) {
                 return day.clone().endOf('week').isSame(day, 'day');
-            };
+            }
+            $scope.isEndOfWeek = isEndOfWeek;
+            this.isEndOfWeek = isEndOfWeek;
 
             this.isMorningOnly = function (day, event) {
                 return event.afternoonIncluded === false && event.endsAt.isSame(day, 'day');
