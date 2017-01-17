@@ -57,6 +57,7 @@ $planning-today-color: red;
 
     tr.planning-group-row {
         td {
+            cursor: default;
             background: repeating-linear-gradient(
                 -45deg,
                 white,
@@ -87,6 +88,7 @@ $planning-today-color: red;
 
         &.planning-day-cell {
             padding: 0 0 0 0;
+            cursor: pointer;
 
             &:hover {
                 background-color: grey;
