@@ -29,8 +29,8 @@ angular.module('angularPlanningApp')
         controller: ['$scope', '$q', 'moment', '_', function PlanningController($scope, $q, moment, _) {
             /* Toggle groups */
             function toggleVisibility(resource, show) {
-                for (var i = 0; i < $scope.resources.length; i++) {
-                    var currentResource = $scope.resources[i];
+                for (var i = 0; i < $scope.flattenedResources.length; i++) {
+                    var currentResource = $scope.flattenedResources[i];
                     if (currentResource.parentGroup === resource.id) {
                         currentResource.show = show;
                         if (currentResource.group === true && currentResource.open === true) {
@@ -49,12 +49,12 @@ angular.module('angularPlanningApp')
             this.toggleFolding = toggleFolding;
 
             function initToggle() {
-                for (var i = 0; i < $scope.resources.length; i++) {
-                    if ($scope.resources[i].group === true) {
-                        if ($scope.resources[i].parentGroup === null) {
-                            $scope.resources[i].show = true;
+                for (var i = 0; i < $scope.flattenedResources.length; i++) {
+                    if ($scope.flattenedResources[i].group === true) {
+                        if ($scope.flattenedResources[i].parentGroup === null) {
+                            $scope.flattenedResources[i].show = true;
                         }
-                        toggleFolding($scope.resources[i], $scope.resources[i].open);
+                        toggleFolding($scope.flattenedResources[i], $scope.flattenedResources[i].open);
                     }
                 }
             }
@@ -75,14 +75,10 @@ angular.module('angularPlanningApp')
                 return _flattenResources(resources, null);
             }
 
-            function updatePlanning() {
-                var minDate = $scope.dates.days[0];
-                var maxDate = $scope.dates.days[$scope.dates.days.length - 1];
-                var promise = $scope.getEvents(minDate, maxDate);
-                promise.then(function (events) {
-                    $scope.events = events;
-                });
-            }
+            $scope.$watch('resources', function (resources) {
+                $scope.flattenedResources = flattenResources(resources);
+                initToggle();
+            });
 
             /* Dates utilities */
             function getMonthsOfDays(days) {
@@ -157,6 +153,15 @@ angular.module('angularPlanningApp')
             $scope.nbDaysDisplayed = 0;
             $scope.planningWidth = 0;
 
+            function updatePlanning() {
+                var minDate = $scope.dates.days[0];
+                var maxDate = $scope.dates.days[$scope.dates.days.length - 1];
+                var promise = $scope.getEvents({minDate: minDate, maxDate: maxDate});
+                promise.then(function (events) {
+                    $scope.events = events;
+                });
+            }
+
             $scope.displayDates = function () {
                 var days = [];
                 var currentDate = $scope.currentDate.clone();
@@ -181,10 +186,6 @@ angular.module('angularPlanningApp')
                     $scope.displayDates();
                 }
             }, true);
-
-            $scope.resources = flattenResources($scope.resources);
-            initToggle();
-            $scope.displayDates();
         }]
     };
 });

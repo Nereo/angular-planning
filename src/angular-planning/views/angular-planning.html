@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr angular-planning-resource-row ng-repeat="resource in resources" resource="resource" events="events[resource.id]" dates="dates" ng-class="{'planning-group-row': resource.group}" ng-show="resource.show"></tr>
+            <tr angular-planning-resource-row ng-repeat="resource in flattenedResources" resource="resource" events="events[resource.id]" dates="dates" ng-class="{'planning-group-row': resource.group}" ng-show="resource.show"></tr>
         </tbody>
     </table>
 </div>
