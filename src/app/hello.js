@@ -95,11 +95,24 @@ angular
                         ]
                     }
                 ];
-            }, 5000);
+            }, 1000);
         };
         vm.getResourcesAsync();
 
-        var events = {};
+        var events = {
+            4: [
+                {
+                    id: 123,
+                    startsAt: moment(),
+                    endsAt: moment().add(7, 'days'),
+                    color: 'yellow',
+                    pending: false,
+                    morningIncluded: true,
+                    afternoonIncluded: false,
+                    priority: 1
+                }
+            ]
+        };
         vm.getEvents = function () {
             var eventsPromise = $q.defer();
 
