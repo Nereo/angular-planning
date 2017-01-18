@@ -162,7 +162,6 @@ angular.module('angularPlanningApp')
                     var eventsPromise = $scope.getEvents({minDate: minDate, maxDate: maxDate});
                     eventsPromise.then(function (events) {
                         vm.events = events;
-                        console.log(events);
                     });
                 }
             }
