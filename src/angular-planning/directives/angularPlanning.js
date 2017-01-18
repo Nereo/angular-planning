@@ -148,10 +148,13 @@ angular.module('angularPlanningApp')
             function updateEvents() {
                 var minDate = $scope.dates.days[0];
                 var maxDate = $scope.dates.days[$scope.dates.days.length - 1];
-                var promise = $scope.getEvents({minDate: minDate, maxDate: maxDate});
-                promise.then(function (events) {
-                    $scope.events = events;
-                });
+
+                if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
+                    var promise = $scope.getEvents({minDate: minDate, maxDate: maxDate});
+                    promise.then(function (events) {
+                        $scope.events = events;
+                    });
+                }
             }
 
             $scope.displayDates = function () {
