@@ -69,6 +69,7 @@ angular.module('angularPlanningApp')
             $scope.$watchCollection('resources', function (resources) {
                 $scope.flattenedResources = flattenResources(resources);
                 initToggle();
+                updateEvents();
             });
 
             /* Dates utilities */
@@ -144,7 +145,7 @@ angular.module('angularPlanningApp')
             $scope.nbDaysDisplayed = 0;
             $scope.planningWidth = 0;
 
-            function updatePlanning() {
+            function updateEvents() {
                 var minDate = $scope.dates.days[0];
                 var maxDate = $scope.dates.days[$scope.dates.days.length - 1];
                 var promise = $scope.getEvents({minDate: minDate, maxDate: maxDate});
@@ -162,7 +163,10 @@ angular.module('angularPlanningApp')
                 }
                 $scope.dates.days = days;
                 $scope.dates.months = getMonthsOfDays($scope.dates.days);
-                updatePlanning();
+
+                if ($scope.resources.length > 0) {
+                    updateEvents();
+                }
             };
 
             $scope.$watch('planningWidth', function (newValue, oldValue) {
