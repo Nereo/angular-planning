@@ -75,7 +75,7 @@ angular.module('angularPlanningApp')
                 return _flattenResources(resources, null);
             }
 
-            $scope.$watch('resources', function (resources) {
+            $scope.$watchCollection('resources', function (resources) {
                 $scope.flattenedResources = flattenResources(resources);
                 initToggle();
             });
