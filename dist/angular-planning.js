@@ -26,11 +26,14 @@ angular.module('angularPlanningApp')
             onEventClick: '&?'
         },
         templateUrl: 'angular-planning/views/angular-planning.html',
+        controllerAs: 'vm',
         controller: ['$scope', '$q', 'moment', '_', function PlanningController($scope, $q, moment, _) {
+            var vm = this;
+
             /* Toggle groups */
             function toggleVisibility(resource, show) {
-                for (var i = 0; i < $scope.flattenedResources.length; i++) {
-                    var currentResource = $scope.flattenedResources[i];
+                for (var i = 0; i < vm.flattenedResources.length; i++) {
+                    var currentResource = vm.flattenedResources[i];
                     if (currentResource.parentGroup === resource.id) {
                         currentResource.show = show;
                         if (currentResource.group === true && currentResource.open === true) {
@@ -40,26 +43,26 @@ angular.module('angularPlanningApp')
                 }
             }
 
-            function toggleFolding(group, open) {
+            vm.toggleFolding = function (group, open) {
                 if (group.group === true) {
                     toggleVisibility(group, open);
                     group.open = open;
                 }
-            }
-            this.toggleFolding = toggleFolding;
+            };
 
             function initToggle() {
-                for (var i = 0; i < $scope.flattenedResources.length; i++) {
-                    if ($scope.flattenedResources[i].group === true) {
-                        if ($scope.flattenedResources[i].parentGroup === null) {
-                            $scope.flattenedResources[i].show = true;
+                for (var i = 0; i < vm.flattenedResources.length; i++) {
+                    if (vm.flattenedResources[i].group === true) {
+                        if (vm.flattenedResources[i].parentGroup === null) {
+                            vm.flattenedResources[i].show = true;
                         }
-                        toggleFolding($scope.flattenedResources[i], $scope.flattenedResources[i].open);
+                        vm.toggleFolding(vm.flattenedResources[i], vm.flattenedResources[i].open);
                     }
                 }
             }
 
             /* Handle resources */
+            vm.flattenedResources = [];
             function flattenResources(resources) {
                 var _flattenResources = function (resources, parentGroupId) {
                     return _.flatMap(resources, function (resource) {
@@ -76,7 +79,7 @@ angular.module('angularPlanningApp')
             }
 
             $scope.$watchCollection('resources', function (resources) {
-                $scope.flattenedResources = flattenResources(resources);
+                vm.flattenedResources = flattenResources(resources);
                 initToggle();
                 updateEvents();
             });
@@ -103,28 +106,24 @@ angular.module('angularPlanningApp')
                 return months;
             }
 
-            function isToday(day) {
+            vm.isToday = function (day) {
                 return day.isSame(moment(), 'day');
-            }
-            $scope.isToday = isToday;
-            this.isToday = isToday;
+            };
 
-            function isEndOfWeek(day) {
+            vm.isEndOfWeek = function (day) {
                 return day.clone().endOf('week').isSame(day, 'day');
-            }
-            $scope.isEndOfWeek = isEndOfWeek;
-            this.isEndOfWeek = isEndOfWeek;
+            };
 
-            this.isMorningOnly = function (day, event) {
+            vm.isMorningOnly = function (day, event) {
                 return event.afternoonIncluded === false && event.endsAt.isSame(day, 'day');
             };
 
-            this.isAfternoonOnly = function (day, event) {
+            vm.isAfternoonOnly = function (day, event) {
                 return event.morningIncluded === false && event.startsAt.isSame(day, 'day');
             };
 
             /* Handle events */
-            this.onDayHover = _.debounce(
+            vm.onDayHover = _.debounce(
                 function (day, resource) {
                     if ($scope.onDayHover && !resource.group) {
                         $scope.onDayHover({day: day, resource: resource});
@@ -133,13 +132,13 @@ angular.module('angularPlanningApp')
                 250
             );
 
-            this.onDayClick = function (day, resource) {
+            vm.onDayClick = function (day, resource) {
                 if ($scope.onDayClick && !resource.group) {
                     $scope.onDayClick({day: day, resource: resource});
                 }
             };
 
-            this.onEventClick = function ($event, event, day, resource) {
+            vm.onEventClick = function ($event, event, day, resource) {
                 if ($scope.onEventClick && !resource.group) {
                     $scope.onEventClick({event: event, day: day, resource: resource});
                 }
@@ -147,16 +146,16 @@ angular.module('angularPlanningApp')
             };
 
             /* Planning display */
-            $scope.dates = {
+            vm.dates = {
                 days: [],
                 months: []
             };
-            $scope.nbDaysDisplayed = 0;
-            $scope.planningWidth = 0;
+            vm.nbDaysDisplayed = 0;
+            vm.planningWidth = 0;
 
             function updateEvents() {
-                var minDate = $scope.dates.days[0];
-                var maxDate = $scope.dates.days[$scope.dates.days.length - 1];
+                var minDate = vm.dates.days[0];
+                var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
                     var promise = $scope.getEvents({minDate: minDate, maxDate: maxDate});
@@ -166,15 +165,15 @@ angular.module('angularPlanningApp')
                 }
             }
 
-            $scope.displayDates = function () {
+            vm.displayDates = function () {
                 var days = [];
                 var currentDate = $scope.currentDate.clone();
-                for (var i = 0; i < $scope.nbDaysDisplayed; i++) {
+                for (var i = 0; i < vm.nbDaysDisplayed; i++) {
                     days.push(currentDate.clone());
                     currentDate.add(1, 'days');
                 }
-                $scope.dates.days = days;
-                $scope.dates.months = getMonthsOfDays($scope.dates.days);
+                vm.dates.days = days;
+                vm.dates.months = getMonthsOfDays(vm.dates.days);
 
                 if ($scope.resources.length > 0) {
                     updateEvents();
@@ -183,14 +182,14 @@ angular.module('angularPlanningApp')
 
             $scope.$watch('planningWidth', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
-                    $scope.nbDaysDisplayed = _.floor((newValue * (1 - $scope.planningResourcesColumnRatio / 100)) / $scope.cellWidth);
-                    $scope.displayDates();
+                    vm.nbDaysDisplayed = _.floor((newValue * (1 - $scope.planningResourcesColumnRatio / 100)) / $scope.cellWidth);
+                    vm.displayDates();
                 }
             });
 
             $scope.$watch('currentDate', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
-                    $scope.displayDates();
+                    vm.displayDates();
                 }
             }, true);
         }]

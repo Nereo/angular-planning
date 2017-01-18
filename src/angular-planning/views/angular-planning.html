@@ -1,23 +1,39 @@
 <div class="planning-wrapper">
+    <div class="planning-loading" ng-if="vm.flattenedResources.length == 0">
+        <i class="fa fa-spin fa-spinner"></i>
+    </div>
     <table class="planning-table" resize-detect watched-width="planningWidth">
         <thead class="planning-table-header">
             <tr>
                 <th class="planning-resources"></th>
-                <th class="planning-month" ng-repeat="month in dates.months track by $index" ng-attr-colspan="{{ month.nbDaysDisplayed }}">
+                <th class="planning-month" ng-repeat="month in vm.dates.months track by $index" ng-attr-colspan="{{ month.nbDaysDisplayed }}">
                     <span ng-bind="month.month.format('MMMM YYYY')"></span>
                 </th>
             </tr>
             <tr>
                 <th class="planning-resources"></th>
-                <th ng-repeat="day in dates.days track by $index" ng-bind="day.format('DD')" ng-class="{'planning-today-cell': isToday(day), 'planning-day-cell-end-of-week': isEndOfWeek(day)}"></th>
+                <th ng-repeat="day in vm.dates.days track by $index" ng-bind="day.format('DD')" ng-class="{'planning-today-cell': vm.isToday(day), 'planning-day-cell-end-of-week': vm.isEndOfWeek(day)}"></th>
             </tr>
             <tr ng-if="showDayOfWeek">
                 <th class="planning-resources"></th>
-                <th ng-repeat="day in dates.days track by $index" ng-bind="day.format('dd')" ng-class="{'planning-today-cell': isToday(day), 'planning-day-cell-end-of-week': isEndOfWeek(day)}"></th>
+                <th ng-repeat="day in vm.dates.days track by $index" ng-bind="day.format('dd')" ng-class="{'planning-today-cell': vm.isToday(day), 'planning-day-cell-end-of-week': vm.isEndOfWeek(day)}"></th>
             </tr>
         </thead>
         <tbody>
-            <tr angular-planning-resource-row ng-repeat="resource in flattenedResources" resource="resource" events="events[resource.id]" dates="dates" ng-class="{'planning-group-row': resource.group}" ng-show="resource.show"></tr>
+            <tr ng-repeat="resource in vm.flattenedResources track by (resource.parentGroup + '-' + resource.id)" ng-class="{'planning-group-row': resource.group}" ng-if="resource.show">
+                <th class="planning-resources" ng-class="{'planning-group-toggle': resource.group}" ng-click="vm.toggleFolding(resource, !resource.open)">
+                    <div class="planning-resource-name">
+                        <i class="fa" ng-if="resource.group" ng-class="{'fa-caret-down': resource.open, 'fa-caret-right': !resource.open}"></i>
+                        <span ng-bind="resource.name"></span>
+                    </div>
+                </th>
+                <td class="planning-day-cell" ng-class="{'planning-day-cell-end-of-week': vm.isEndOfWeek(day), 'planning-today-cell': vm.isToday(day)}" ng-repeat="day in vm.dates.days track by $index" ng-mouseover="vm.onDayHover(day, resource)" ng-click="vm.onDayClick(day, resource)">
+                    <span class="planning-day-event" ng-repeat="event in vm.events track by event.id" ng-if="day.isSameOrAfter(event.startsAt, 'day') && day.isSameOrBefore(event.endsAt, 'day')" ng-style="{
+                      background: vm.isMorningOnly(day, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(day, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" ng-click="vm.onEventClick($event, event, day, resource)">
+                        <i class="fa fa-hourglass-half" ng-if="event.pending"></i>
+                    </span>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
