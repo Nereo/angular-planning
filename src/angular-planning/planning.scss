@@ -109,6 +109,7 @@ $planning-today-color: red;
         &.planning-day-cell {
             padding: 0 0 0 0;
             cursor: pointer;
+            position: relative;
 
             &:hover {
                 background-color: grey;
@@ -142,6 +143,9 @@ $planning-today-color: red;
     }
 
     .planning-day-event {
+        position: absolute;
+        top: 0;
+        left: 0;
         display: block;
         overflow: auto;
         width: 100%;
