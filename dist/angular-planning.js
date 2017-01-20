@@ -156,8 +156,8 @@ angular.module('angularPlanningApp')
 
             vm.events = [];
             function updateEvents() {
-                var minDate = vm.dates.days[0];
-                var maxDate = vm.dates.days[vm.dates.days.length - 1];
+                var minDate = vm.dates.days[0].day;
+                var maxDate = vm.dates.days[vm.dates.days.length - 1].day;
 
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
                     var eventsPromise = $scope.getEvents({minDate: minDate, maxDate: maxDate});
