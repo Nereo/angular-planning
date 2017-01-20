@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="resource in vm.flattenedResources track by (resource.parentGroup + '-' + resource.id)" ng-class="{'planning-group-row': resource.group}" ng-if="resource.show">
+            <tr ng-repeat="resource in vm.flattenedResources" ng-class="{'planning-group-row': resource.group}" ng-if="resource.show">
                 <th class="planning-resources" ng-class="{'planning-group-toggle': resource.group}" ng-click="vm.toggleFolding(resource, !resource.open)">
                     <div class="planning-resource-name" ng-class="{'planning-resource-person': !resource.group}" ng-style="{'padding-left': ((resource.depth + 1) * resource.group * 10) + 'px'}">
                         <i class="fa" ng-if="resource.group" ng-class="{'fa-caret-down': resource.open, 'fa-caret-right': !resource.open}"></i>
