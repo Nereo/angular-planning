@@ -110,7 +110,18 @@ angular
                     morningIncluded: true,
                     afternoonIncluded: false,
                     priority: 1
+                },
+                {
+                    id: 123,
+                    startsAt: moment().add(2, 'days'),
+                    endsAt: moment().add(5, 'days'),
+                    color: 'red',
+                    pending: false,
+                    morningIncluded: true,
+                    afternoonIncluded: false,
+                    priority: 1
                 }
+
             ]
         };
         vm.getEvents = function () {

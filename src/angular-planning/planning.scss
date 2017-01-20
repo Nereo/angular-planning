@@ -1,8 +1,9 @@
 $planning-row-height: 20px;
 $planning-cell-width: 20px;
-$planning-body-height: 100px;
+$planning-body-height: 500px;
 $planning-border-color: lightgrey;
 $planning-today-color: red;
+
 
 .planning-wrapper {
     position: relative;
@@ -26,11 +27,13 @@ $planning-today-color: red;
 
 .planning-table {
     table-layout: fixed;
-    border-collapse: collapse;
-    border-spacing: 0;
     margin: 0;
     font-size: 10px;
     width: 100%;
+    border-spacing: 0;
+
+    border: 1px solid $planning-border-color;
+    border-width: 0 1px 1px 0;
 
     * {
         box-sizing: border-box;
@@ -39,7 +42,8 @@ $planning-today-color: red;
     tr, td, th {
         height: $planning-row-height;
         border: 1px solid $planning-border-color;
-        background-color: white;
+        border-width: 1px 0 0 1px;
+        background-color: transparent;
     }
 
     thead {
@@ -72,6 +76,7 @@ $planning-today-color: red;
         width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
         height: $planning-body-height;
     }
 
@@ -93,7 +98,6 @@ $planning-today-color: red;
         table-layout: fixed;
         min-width: 25%;
         width: 100%;
-        border: none;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -142,12 +146,15 @@ $planning-today-color: red;
         cursor: pointer;
     }
 
+    .planning-day-events {
+        height: 100%;
+        width: 100%;
+    }
+
     .planning-day-event {
         position: absolute;
         top: 0;
         left: 0;
-        display: block;
-        overflow: auto;
         width: 100%;
         height: 100%;
 
