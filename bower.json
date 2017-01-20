@@ -1,6 +1,6 @@
 {
   "name": "angular-planning",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "dependencies": {
     "angular": "^1.5.0",
     "moment": "~2.17.0",
