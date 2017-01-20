@@ -84,7 +84,7 @@ angular.module('angularPlanningApp')
                     nbDaysDisplayed: 0
                 };
                 for (var i = 0; i < days.length; i++) {
-                    var month = days[i].clone().startOf('month');
+                    var month = days[i].day.clone().startOf('month');
                     if (month.isSame(lastMonth.month, 'month') === false) {
                         lastMonth = {
                             month: month,
@@ -160,9 +160,21 @@ angular.module('angularPlanningApp')
 
             vm.displayDates = function () {
                 var days = [];
+
+                var day = {
+                    day: null,
+                    isToday: false,
+                    isEndOfWeek: false
+                };
+
                 var currentDate = $scope.currentDate.clone();
                 for (var i = 0; i < vm.nbDaysDisplayed; i++) {
-                    days.push(currentDate.clone());
+                    day = {
+                        day: currentDate.clone(),
+                        isToday: vm.isToday(currentDate),
+                        isEndOfWeek: vm.isEndOfWeek(currentDate)
+                    };
+                    days.push(day);
                     currentDate.add(1, 'days');
                 }
                 vm.dates.days = days;
