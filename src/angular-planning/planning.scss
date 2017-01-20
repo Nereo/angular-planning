@@ -3,7 +3,7 @@ $planning-cell-width: 20px;
 $planning-body-height: 500px;
 $planning-border-color: lightgrey;
 $planning-today-color: red;
-
+$planning-group-row-color: #f7f7f8;
 
 .planning-wrapper {
     position: relative;
@@ -81,23 +81,34 @@ $planning-today-color: red;
     }
 
     tr.planning-group-row {
+        background: $planning-group-row-color;
+
         td {
             cursor: default;
-            background: lightgrey;
+            border-width: 1px 0 0 0;
+
+            &:hover {
+                background-color: $planning-group-row-color;
+            }
+        }
+
+        :nth-child(2) {
+            border-width: 1px 0 0 1px;
         }
     }
 
     th.planning-resources {
         display: table;
         table-layout: fixed;
-        min-width: 25%;
         width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        text-align: left;
 
-        .planning-resource-name {
-            padding-left: 10px;
+        .planning-resource-person {
+            text-align: right;
+            padding-right: 10px;
         }
     }
 
@@ -122,7 +133,7 @@ $planning-today-color: red;
         text-overflow: ellipsis;
         white-space: nowrap;
         text-transform: capitalize;
-        
+
         span {
             position: relative;
             display: inline-block;
@@ -132,6 +143,7 @@ $planning-today-color: red;
 
     .planning-day-cell-end-of-week {
         border-right: 4px solid grey;
+        border-right-width: 4px !important;
     }
 
     th.planning-today-cell {

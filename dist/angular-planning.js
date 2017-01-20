@@ -20,6 +20,7 @@ angular.module('angularPlanningApp')
             currentDate: '=',
             cellWidth: '=',
             planningResourcesColumnRatio: '=',
+            groupColor: '=',
             showDayOfWeek: '=',
             onDayHover: '&?',
             onDayClick: '&?',
@@ -64,18 +65,19 @@ angular.module('angularPlanningApp')
             /* Handle resources */
             vm.flattenedResources = [];
             function flattenResources(resources) {
-                var _flattenResources = function (resources, parentGroupId) {
+                var _flattenResources = function (resources, parentGroupId, depth) {
                     return _.flatMap(resources, function (resource) {
                         resource.parentGroup = parentGroupId;
+                        resource.depth = depth;
                         if (resource.children) {
                             resource.group = true;
-                            return _.concat(resource, _flattenResources(resource.children, resource.id));
+                            return _.concat(resource, _flattenResources(resource.children, resource.id, depth + 1));
                         }
                         resource.group = false;
                         return [resource];
                     });
                 };
-                return _flattenResources(resources, null);
+                return _flattenResources(resources, null, 0);
             }
 
             $scope.$watchCollection('resources', function (resources) {
