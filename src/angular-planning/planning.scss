@@ -83,13 +83,7 @@ $planning-today-color: red;
     tr.planning-group-row {
         td {
             cursor: default;
-            background: repeating-linear-gradient(
-                -45deg,
-                white,
-                white 5px,
-                lightgrey 5px,
-                lightgrey 7px
-            );
+            background: lightgrey;
         }
     }
 
@@ -127,6 +121,8 @@ $planning-today-color: red;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        text-transform: capitalize;
+        
         span {
             position: relative;
             display: inline-block;

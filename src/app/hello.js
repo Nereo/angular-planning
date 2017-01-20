@@ -2,6 +2,7 @@ angular
     .module('app')
     .controller('AppController', function ($scope, moment, $q, $timeout, $log) {
         var vm = this;
+        moment.locale('fr');
 
         vm.currentDate = moment();
         vm.addDays = function (nbDays) {
