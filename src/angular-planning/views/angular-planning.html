@@ -14,7 +14,7 @@
             </tr>
             <tr ng-if="showDayOfWeek">
                 <th class="planning-resources">&nbsp;</th>
-                <th ng-repeat="day in vm.dates.days track by day.unix()" ng-class="{'planning-today-cell': vm.isToday(day), 'planning-day-cell-end-of-week': vm.isEndOfWeek(day)}">{{ ::day.format('DD') }}</th>
+                <th ng-repeat="day in vm.dates.days track by day.unix()" ng-class="{'planning-today-cell': vm.isToday(day), 'planning-day-cell-end-of-week': vm.isEndOfWeek(day)}">{{ ::day.format('dd') }}</th>
             </tr>
         </thead>
         <tbody>
