@@ -84,10 +84,11 @@ angular.module('angularPlanningApp')
                     nbDaysDisplayed: 0
                 };
                 for (var i = 0; i < days.length; i++) {
-                    var month = days[i].day.clone().startOf('month');
+                    var month = moment(days[i].day).startOf('month');
                     if (month.isSame(lastMonth.month, 'month') === false) {
                         lastMonth = {
-                            month: month,
+                            month: month.toDate(),
+                            monthName: month.format('MMMM YYYY'),
                             nbDaysDisplayed: 1
                         };
                         months.push(lastMonth);
@@ -107,11 +108,11 @@ angular.module('angularPlanningApp')
             };
 
             vm.isMorningOnly = function (day, event) {
-                return event.afternoonIncluded === false && event.endsAt.isSame(day, 'day');
+                return event.afternoonIncluded === false && moment(event.endsAt).isSame(moment(day), 'day');
             };
 
             vm.isAfternoonOnly = function (day, event) {
-                return event.morningIncluded === false && event.startsAt.isSame(day, 'day');
+                return event.morningIncluded === false && moment(event.startsAt).isSame(moment(day), 'day');
             };
 
             /* Handle events */
@@ -170,7 +171,9 @@ angular.module('angularPlanningApp')
                 var currentDate = $scope.currentDate.clone();
                 for (var i = 0; i < vm.nbDaysDisplayed; i++) {
                     day = {
-                        day: currentDate.clone(),
+                        day: currentDate.toDate(),
+                        dayNumber: currentDate.format('DD'),
+                        weekDayName: currentDate.format('dd'),
                         isToday: vm.isToday(currentDate),
                         isEndOfWeek: vm.isEndOfWeek(currentDate)
                     };

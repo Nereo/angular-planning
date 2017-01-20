@@ -104,8 +104,8 @@ angular
             4: [
                 {
                     id: 123,
-                    startsAt: moment(),
-                    endsAt: moment().add(7, 'days'),
+                    startsAt: moment().toDate(),
+                    endsAt: moment().add(7, 'days').toDate(),
                     color: 'yellow',
                     pending: false,
                     morningIncluded: true,
@@ -114,8 +114,8 @@ angular
                 },
                 {
                     id: 123,
-                    startsAt: moment().add(2, 'days'),
-                    endsAt: moment().add(5, 'days'),
+                    startsAt: moment().add(2, 'days').toDate(),
+                    endsAt: moment().add(5, 'days').toDate(),
                     color: 'red',
                     pending: false,
                     morningIncluded: true,
