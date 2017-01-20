@@ -6,17 +6,17 @@
         <thead class="planning-table-header">
             <tr>
                 <th class="planning-resources">&nbsp;</th>
-                <th class="planning-month" ng-repeat="month in vm.dates.months track by $index" ng-attr-colspan="{{ month.nbDaysDisplayed }}">
+                <th class="planning-month" ng-repeat="month in vm.dates.months" ng-attr-colspan="{{ month.nbDaysDisplayed }}">
                     <span ng-bind="month.month.format('MMMM YYYY')"></span>
                 </th>
             </tr>
             <tr>
                 <th class="planning-resources">&nbsp;</th>
-                <th ng-repeat="day in vm.dates.days track by $index" ng-bind="day.format('DD')" ng-class="{'planning-today-cell': vm.isToday(day), 'planning-day-cell-end-of-week': vm.isEndOfWeek(day)}"></th>
+                <th ng-repeat="day in vm.dates.days" ng-bind="day.format('DD')" ng-class="{'planning-today-cell': vm.isToday(day), 'planning-day-cell-end-of-week': vm.isEndOfWeek(day)}"></th>
             </tr>
             <tr ng-if="showDayOfWeek">
                 <th class="planning-resources">&nbsp;</th>
-                <th ng-repeat="day in vm.dates.days track by $index" ng-bind="day.format('dd')" ng-class="{'planning-today-cell': vm.isToday(day), 'planning-day-cell-end-of-week': vm.isEndOfWeek(day)}"></th>
+                <th ng-repeat="day in vm.dates.days" ng-bind="day.format('dd')" ng-class="{'planning-today-cell': vm.isToday(day), 'planning-day-cell-end-of-week': vm.isEndOfWeek(day)}"></th>
             </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
                         <span ng-bind="resource.name"></span>
                     </div>
                 </th>
-                <td class="planning-day-cell" ng-class="{'planning-day-cell-end-of-week': vm.isEndOfWeek(day), 'planning-today-cell': vm.isToday(day)}" ng-repeat="day in vm.dates.days track by $index" ng-mouseover="vm.onDayHover(day, resource)" ng-click="vm.onDayClick(day, resource)">
+                <td class="planning-day-cell" ng-class="{'planning-day-cell-end-of-week': vm.isEndOfWeek(day), 'planning-today-cell': vm.isToday(day)}" ng-repeat="day in vm.dates.days" ng-mouseover="vm.onDayHover(day, resource)" ng-click="vm.onDayClick(day, resource)">
                     <div class="planning-day-events">
                         <div class="planning-day-event" ng-repeat="event in vm.events[resource.id]" ng-if="day.isSameOrAfter(event.startsAt, 'day') && day.isSameOrBefore(event.endsAt, 'day')" ng-style="{
                           background: vm.isMorningOnly(day, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(day, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" ng-click="vm.onEventClick($event, event, day, resource)">
