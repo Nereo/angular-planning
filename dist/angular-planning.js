@@ -189,11 +189,16 @@ angular.module('angularPlanningApp')
                 }
             });
 
-            $scope.$watch('currentDate', function (newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    vm.displayDates();
+            $scope.$watch(
+                function () {
+                    return $scope.currentDate.unix();
+                },
+                function (newValue, oldValue) {
+                    if (newValue !== oldValue) {
+                        vm.displayDates();
+                    }
                 }
-            }, true);
+            );
         }]
     };
 });
