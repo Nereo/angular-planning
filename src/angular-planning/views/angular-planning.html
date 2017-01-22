@@ -25,10 +25,10 @@
                         {{ ::resource.name }}
                     </div>
                 </th>
-                <td class="planning-day-cell" ng-class="{'planning-day-cell-end-of-week': day.isEndOfWeek, 'planning-today-cell': day.isToday}" ng-repeat="day in vm.dates.days track by day.day" ng-mouseover="vm.onDayHover(day.day, resource)" ng-click="vm.onDayClick(day.day, resource)">
-                    <div class="planning-day-events">
-                        <div class="planning-day-event" ng-repeat="event in vm.events[resource.id]" ng-if="day.day >= event.startsAt && day.day <= event.endsAt" ng-style="{
-                          background: vm.isMorningOnly(day.day, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(day.day, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" ng-click="vm.onEventClick($event, event, day.day, resource)">
+                <td class="planning-day-cell" ng-class="{'planning-day-cell-end-of-week': vm.isEndOfWeek(index), 'planning-today-cell': vm.isToday(index)}" ng-repeat="index in vm.dates.indices track by $index">
+                    <div class="planning-day-events" ng-if="!resource.group" ng-mouseover="vm.onDayHover(index, resource)" ng-click="vm.onDayClick(index, resource)">
+                        <div class="planning-day-event" ng-repeat="event in vm.getEventsDay(index, resource.id)" ng-style="{
+                          background: vm.isMorningOnly(index, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(index, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" ng-click="vm.onEventClick($event, event, index, resource)">
                             <i class="fa fa-hourglass-half" ng-if="event.pending"></i>
                         </div>
                     </div>

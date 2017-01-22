@@ -99,47 +99,65 @@ angular.module('angularPlanningApp')
                 return months;
             }
 
-            vm.isToday = function (day) {
-                return day.isSame(moment(), 'day');
+            vm.getDay = function (index) {
+                return $scope.currentDate.clone().add(index, 'days');
             };
 
-            vm.isEndOfWeek = function (day) {
+            vm.isToday = function (index) {
+                return vm.getDay(index).isSame(moment(), 'day');
+            };
+
+            vm.isEndOfWeek = function (index) {
+                var day = vm.getDay(index);
                 return day.clone().endOf('week').isSame(day, 'day');
             };
 
-            vm.isMorningOnly = function (day, event) {
+            vm.isMorningOnly = function (index, event) {
+                var day = vm.getDay(index);
                 return event.afternoonIncluded === false && moment(event.endsAt).isSame(moment(day), 'day');
             };
 
-            vm.isAfternoonOnly = function (day, event) {
+            vm.isAfternoonOnly = function (index, event) {
+                var day = vm.getDay(index);
                 return event.morningIncluded === false && moment(event.startsAt).isSame(moment(day), 'day');
             };
 
             /* Handle events */
             vm.onDayHover = _.debounce(
-                function (day, resource) {
+                function (index, resource) {
                     if ($scope.onDayHover && !resource.group) {
+                        var day = vm.getDay(index).toDate();
                         $scope.onDayHover({day: day, resource: resource});
                     }
                 },
                 250
             );
 
-            vm.onDayClick = function (day, resource) {
+            vm.onDayClick = function (index, resource) {
                 if ($scope.onDayClick && !resource.group) {
+                    var day = vm.getDay(index).toDate();
                     $scope.onDayClick({day: day, resource: resource});
                 }
             };
 
-            vm.onEventClick = function ($event, event, day, resource) {
+            vm.onEventClick = function ($event, event, index, resource) {
                 if ($scope.onEventClick && !resource.group) {
+                    var day = vm.getDay(index).toDate();
                     $scope.onEventClick({event: event, day: day, resource: resource});
                 }
                 $event.stopPropagation();
             };
 
+            vm.getEventsDay = function (index, resourceId) {
+                var day = vm.getDay(index).toDate();
+                return _.filter(vm.events[resourceId], function (event) {
+                    return day >= event.startsAt && day <= event.endsAt;
+                });
+            };
+
             /* Planning display */
             vm.dates = {
+                indices: [],
                 days: [],
                 months: []
             };
@@ -174,18 +192,21 @@ angular.module('angularPlanningApp')
                         day: currentDate.toDate(),
                         dayNumber: currentDate.format('DD'),
                         weekDayName: currentDate.format('dd'),
-                        isToday: vm.isToday(currentDate),
-                        isEndOfWeek: vm.isEndOfWeek(currentDate)
+                        isToday: vm.isToday(i),
+                        isEndOfWeek: vm.isEndOfWeek(i)
                     };
                     days.push(day);
                     currentDate.add(1, 'days');
                 }
                 vm.dates.days = days;
-                vm.dates.months = getMonthsOfDays(vm.dates.days);
 
                 if ($scope.resources.length > 0) {
                     updateEvents();
                 }
+
+                vm.dates.indices = _.range(vm.nbDaysDisplayed);
+
+                vm.dates.months = getMonthsOfDays(vm.dates.days);
             };
 
             $scope.$watch('planningWidth', function (newValue, oldValue) {

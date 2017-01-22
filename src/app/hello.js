@@ -94,7 +94,227 @@ angular
                                 name: 'Han Solo'
                             }
                         ]
-                    }
+                    },
+                    {
+                        id: 12,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 13,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 14,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 15,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 16,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 17,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 18,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 19,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 20,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 21,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 22,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 23,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 24,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 25,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 26,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 27,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 28,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 29,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 30,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 31,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 32,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 33,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 34,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 35,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 36,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 37,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 38,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 39,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 40,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 41,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 42,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 43,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 44,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 45,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 46,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 47,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 48,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 49,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    },
+                    {
+                        id: 50,
+                        name: 'Movies',
+                        open: false,
+                        children: [
+                            {
+                                id: 51,
+                                name: 'Han Solo'
+                            }
+                        ]
+                    }                                      
                 ];
             }, 1000);
         };
