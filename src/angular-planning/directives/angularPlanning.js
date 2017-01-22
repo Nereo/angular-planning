@@ -100,7 +100,7 @@ angular.module('angularPlanningApp')
             }
 
             vm.getDay = function (index) {
-                return $scope.currentDate.clone().add(index, 'days');
+                return vm.dates.current.clone().add(index, 'days');
             };
 
             vm.isToday = function (index) {
@@ -114,12 +114,12 @@ angular.module('angularPlanningApp')
 
             vm.isMorningOnly = function (index, event) {
                 var day = vm.getDay(index);
-                return event.afternoonIncluded === false && moment(event.endsAt).isSame(moment(day), 'day');
+                return event.afternoonIncluded === false && moment(event.endsAt).isSame(day, 'day');
             };
 
             vm.isAfternoonOnly = function (index, event) {
                 var day = vm.getDay(index);
-                return event.morningIncluded === false && moment(event.startsAt).isSame(moment(day), 'day');
+                return event.morningIncluded === false && moment(event.startsAt).isSame(day, 'day');
             };
 
             /* Handle events */
@@ -157,6 +157,7 @@ angular.module('angularPlanningApp')
 
             /* Planning display */
             vm.dates = {
+                current: null,
                 indices: [],
                 days: [],
                 months: []
@@ -178,6 +179,8 @@ angular.module('angularPlanningApp')
             }
 
             vm.displayDates = function () {
+                vm.dates.current = $scope.currentDate.clone();
+
                 var days = [];
 
                 var day = {
@@ -186,7 +189,7 @@ angular.module('angularPlanningApp')
                     isEndOfWeek: false
                 };
 
-                var currentDate = $scope.currentDate.clone();
+                var currentDate = vm.dates.current.clone();
                 for (var i = 0; i < vm.nbDaysDisplayed; i++) {
                     day = {
                         day: currentDate.toDate(),
@@ -212,6 +215,7 @@ angular.module('angularPlanningApp')
             $scope.$watch('planningWidth', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                     vm.nbDaysDisplayed = _.floor((newValue * (1 - $scope.planningResourcesColumnRatio / 100)) / $scope.cellWidth);
+                    vm.dates.indices = [];
                     vm.displayDates();
                 }
             });
