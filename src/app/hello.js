@@ -350,7 +350,7 @@ angular
 
             $timeout(function () {
                 eventsPromise.resolve(events);
-            }, 1000);
+            }, 3000);
 
             return eventsPromise.promise;
         };

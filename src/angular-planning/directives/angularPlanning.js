@@ -149,9 +149,9 @@ angular.module('angularPlanningApp')
             };
 
             vm.getEventsDay = function (index, resourceId) {
-                var day = vm.getDay(index).toDate();
+                var day = vm.getDay(index);
                 return _.filter(vm.events[resourceId], function (event) {
-                    return day >= event.startsAt && day <= event.endsAt;
+                    return day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day');
                 });
             };
 
