@@ -10,11 +10,14 @@
             </tr>
             <tr>
                 <th class="planning-resources">&nbsp;</th>
-                <th ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday, 'planning-day-cell-end-of-week': day.isEndOfWeek}">{{ ::day.dayNumber }}</th>
+                <th ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday }">
+                    {{ ::day.dayNumber }}
+                    <div class="planning-end-of-week-bar" ng-show="day.isEndOfWeek"></div>
+                </th>
             </tr>
             <tr ng-if="showDayOfWeek">
                 <th class="planning-resources">&nbsp;</th>
-                <th ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday, 'planning-day-cell-end-of-week': day.isEndOfWeek}">{{ ::day.weekDayName }}</th>
+                <th ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">{{ ::day.weekDayName }}</th>
             </tr>
         </thead>
         <tbody>
@@ -25,7 +28,7 @@
                         {{ ::resource.name }}
                     </div>
                 </th>
-                <td class="planning-day-cell" ng-class="{'planning-day-cell-end-of-week': vm.isEndOfWeek(index), 'planning-today-cell': vm.isToday(index)}" ng-repeat="index in vm.dates.indices">
+                <td class="planning-day-cell" ng-repeat="index in vm.dates.indices">
                     <div class="planning-day-events" ng-if="!resource.group" ng-mouseover="vm.onDayHover(index, resource)" ng-click="vm.onDayClick(index, resource)">
                         <div class="planning-day-event" ng-repeat="event in vm.getEventsDay(index, resource.id)" ng-style="{
                           background: vm.isMorningOnly(index, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(index, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" ng-click="vm.onEventClick($event, event, index, resource)">

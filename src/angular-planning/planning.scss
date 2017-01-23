@@ -5,6 +5,7 @@ $planning-border-color: lightgrey;
 $planning-today-color: red;
 $planning-group-row-color: #f7f7f8;
 $planning-hover-color: grey;
+$planning-end-of-week-bar-width: 4px;
 
 .planning-wrapper {
     position: relative;
@@ -148,9 +149,14 @@ $planning-hover-color: grey;
         }
     }
 
-    .planning-day-cell-end-of-week {
-        border-right: 4px solid grey;
-        border-right-width: 4px !important;
+    .planning-end-of-week-bar {
+        position: absolute;
+        top: $planning-row-height;
+        width: $planning-end-of-week-bar-width;
+        height: 100%;
+        margin-left: - $planning-end-of-week-bar-width / 2;
+        background-color: $planning-hover-color;
+        z-index: 10;
     }
 
     th.planning-today-cell {
