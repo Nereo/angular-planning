@@ -94,9 +94,9 @@ $planning-end-of-week-bar-width: 4px;
 
     tr.planning-group-row {
         background: $planning-group-row-color;
+        cursor: pointer;
 
         td {
-            cursor: default;
             border-width: 1px 0 0 0;
 
             &:hover {
@@ -166,11 +166,7 @@ $planning-end-of-week-bar-width: 4px;
     th.planning-today-cell {
         background-color: $planning-today-color;
     }
-
-    .planning-group-toggle {
-        cursor: pointer;
-    }
-
+    
     .planning-day-events {
         height: 100%;
         width: 100%;
