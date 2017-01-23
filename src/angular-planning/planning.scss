@@ -158,7 +158,7 @@ $planning-end-of-week-bar-width: 4px;
         top: $planning-row-height;
         width: $planning-end-of-week-bar-width;
         height: 100%;
-        margin-left: - $planning-end-of-week-bar-width / 2;
+        margin-left: $planning-cell-width - $planning-end-of-week-bar-width / 2;
         background-color: $planning-hover-color;
         z-index: 10;
     }
@@ -166,7 +166,7 @@ $planning-end-of-week-bar-width: 4px;
     th.planning-today-cell {
         background-color: $planning-today-color;
     }
-    
+
     .planning-day-events {
         height: 100%;
         width: 100%;
