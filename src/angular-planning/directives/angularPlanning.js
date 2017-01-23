@@ -158,6 +158,7 @@ angular.module('angularPlanningApp')
             /* Planning display */
             vm.dates = {
                 current: null,
+                dayHovered: -1,
                 indices: [],
                 days: [],
                 months: []
@@ -192,6 +193,7 @@ angular.module('angularPlanningApp')
                 var currentDate = vm.dates.current.clone();
                 for (var i = 0; i < vm.nbDaysDisplayed; i++) {
                     day = {
+                        index: i,
                         day: currentDate.toDate(),
                         dayNumber: currentDate.format('DD'),
                         weekDayName: currentDate.format('dd'),
@@ -210,6 +212,10 @@ angular.module('angularPlanningApp')
                 vm.dates.indices = _.range(vm.nbDaysDisplayed);
 
                 vm.dates.months = getMonthsOfDays(vm.dates.days);
+            };
+
+            vm.highlightDayHovered = function (index) {
+                vm.dates.dayHovered = index;
             };
 
             $scope.$watch('planningWidth', function (newValue, oldValue) {

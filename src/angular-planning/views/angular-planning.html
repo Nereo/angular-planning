@@ -10,17 +10,17 @@
             </tr>
             <tr>
                 <th class="planning-resources">&nbsp;</th>
-                <th ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday }">
+                <th ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday, 'planning-day-hovered-cell': vm.dates.dayHovered == day.index}">
                     {{ ::day.dayNumber }}
                     <div class="planning-end-of-week-bar" ng-show="day.isEndOfWeek"></div>
                 </th>
             </tr>
             <tr ng-if="showDayOfWeek">
                 <th class="planning-resources">&nbsp;</th>
-                <th ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">{{ ::day.weekDayName }}</th>
+                <th ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday, 'planning-day-hovered-cell': vm.dates.dayHovered == day.index}">{{ ::day.weekDayName }}</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody ng-mouseleave="vm.highlightDayHovered(-1)">
             <tr ng-repeat="resource in vm.flattenedResources track by (resource.parentGroup + '-' + resource.id)" ng-class="{'planning-group-row': resource.group}" ng-if="resource.show">
                 <th class="planning-resources" ng-class="{'planning-group-toggle': resource.group}" ng-click="vm.toggleFolding(resource, !resource.open)">
                     <div class="planning-resource-name" ng-class="{'planning-resource-person': !resource.group}" ng-style="{'padding-left': ((resource.depth + 1) * resource.group * 10) + 'px'}">
@@ -28,7 +28,7 @@
                         {{ ::resource.name }}
                     </div>
                 </th>
-                <td class="planning-day-cell" ng-repeat="index in vm.dates.indices">
+                <td class="planning-day-cell" ng-repeat="index in vm.dates.indices" ng-mouseover="vm.highlightDayHovered(index)">
                     <div class="planning-day-events" ng-if="!resource.group" ng-mouseover="vm.onDayHover(index, resource)" ng-click="vm.onDayClick(index, resource)">
                         <div class="planning-day-event" ng-repeat="event in vm.getEventsDay(index, resource.id)" ng-style="{
                           background: vm.isMorningOnly(index, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(index, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" ng-click="vm.onEventClick($event, event, index, resource)">

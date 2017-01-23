@@ -70,6 +70,10 @@ $planning-end-of-week-bar-width: 4px;
             &:first-child, &:first-child+tr, &:first-child+tr+tr {
                 border: 0;
             }
+
+            .planning-day-hovered-cell {
+                background-color: $planning-hover-color;
+            }
         }
     }
 
