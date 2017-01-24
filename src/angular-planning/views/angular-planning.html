@@ -30,7 +30,7 @@
                 </th>
                 <td class="planning-day-cell" ng-repeat="index in vm.dates.indices" ng-mouseover="vm.highlightDayHovered(index)">
                     <div class="planning-day-events" ng-if="!resource.group" ng-mouseover="vm.onDayHover(index, resource)" ng-click="vm.onDayClick(index, resource)">
-                        <div class="planning-day-event" ng-repeat="event in vm.getEventsDay(index, resource.id)" ng-style="{
+                        <div class="planning-day-event" ng-repeat="event in vm.events[resource.id][index] track by (event.id + '-' + index)" ng-style="{
                           background: vm.isMorningOnly(index, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(index, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" ng-click="vm.onEventClick($event, event, index, resource)">
                             <i class="fa fa-hourglass-half" ng-if="event.pending"></i>
                         </div>

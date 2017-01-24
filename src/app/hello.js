@@ -314,7 +314,7 @@ angular
                                 name: 'Han Solo'
                             }
                         ]
-                    }                                      
+                    }
                 ];
             }, 1000);
         };
@@ -333,7 +333,7 @@ angular
                     priority: 1
                 },
                 {
-                    id: 123,
+                    id: 456,
                     startsAt: moment().add(2, 'days').toDate(),
                     endsAt: moment().add(5, 'days').toDate(),
                     color: 'red',
@@ -350,7 +350,7 @@ angular
 
             $timeout(function () {
                 eventsPromise.resolve(events);
-            }, 3000);
+            }, 1000);
 
             return eventsPromise.promise;
         };

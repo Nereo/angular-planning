@@ -157,9 +157,8 @@ angular.module('angularPlanningApp')
                 $event.stopPropagation();
             };
 
-            vm.getEventsDay = function (index, resourceId) {
-                var day = vm.getDay(index);
-                return _.filter(vm.events[resourceId], function (event) {
+            vm.getEventsDay = function (day, events) {
+                return _.filter(events, function (event) {
                     return day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day');
                 });
             };
@@ -181,9 +180,16 @@ angular.module('angularPlanningApp')
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
+                    vm.events = [];
                     var eventsPromise = $scope.getEvents({minDate: minDate.day, maxDate: maxDate.day});
                     eventsPromise.then(function (events) {
-                        vm.events = events;
+                        _.forEach(vm.dates.indices, function (index) {
+                            var day = vm.getDay(index);
+                            _.forEach(_.filter(vm.flattenedResources, {group: false}), function (resource) {
+                                var resourceIndexEvents = vm.getEventsDay(day, events[resource.id]);
+                                _.set(vm.events, [resource.id, index], resourceIndexEvents);
+                            });
+                        });
                     });
                 }
             }
@@ -246,26 +252,6 @@ angular.module('angularPlanningApp')
                 }
             );
         }]
-    };
-});
-
-'use strict';
-
-angular.module('angularPlanningApp')
-
-.directive('angularPlanningResourceRow', function () {
-    return {
-        require: '^^angularPlanning',
-        restrict: 'A',
-        scope: {
-            resource: '=',
-            events: '=',
-            dates: '='
-        },
-        link: function (scope, element, attrs, planningController) {
-            scope.planningController = planningController;
-        },
-        templateUrl: 'angular-planning/views/angular-planning-resource-row.html'
     };
 });
 
