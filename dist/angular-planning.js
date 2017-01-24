@@ -86,28 +86,6 @@ angular.module('angularPlanningApp')
             });
 
             /* Dates utilities */
-            function getMonthsOfDays(days) {
-                var months = [];
-                var lastMonth = {
-                    month: null,
-                    nbDaysDisplayed: 0
-                };
-                for (var i = 0; i < days.length; i++) {
-                    var month = moment(days[i].day).startOf('month');
-                    if (month.isSame(lastMonth.month, 'month') === false) {
-                        lastMonth = {
-                            month: month.toDate(),
-                            monthName: month.format('MMMM YYYY'),
-                            nbDaysDisplayed: 1
-                        };
-                        months.push(lastMonth);
-                    } else {
-                        lastMonth.nbDaysDisplayed++;
-                    }
-                }
-                return months;
-            }
-
             vm.getDay = function (index) {
                 return vm.dates.current.clone().add(index, 'days');
             };
@@ -154,11 +132,11 @@ angular.module('angularPlanningApp')
                     var day = vm.getDay(index).toDate();
                     $scope.onEventClick({event: event, day: day, resource: resource});
                 }
-                $event.stopPropagation();
             };
 
-            vm.getEventsDay = function (day, events) {
-                return _.filter(events, function (event) {
+            vm.getEventsDay = function (index, resourceId) {
+                var day = vm.getDay(index);
+                return _.filter(vm.events[resourceId], function (event) {
                     return day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day');
                 });
             };
@@ -166,7 +144,6 @@ angular.module('angularPlanningApp')
             /* Planning display */
             vm.dates = {
                 current: null,
-                dayHovered: -1,
                 indices: [],
                 days: [],
                 months: []
@@ -180,16 +157,9 @@ angular.module('angularPlanningApp')
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
-                    vm.events = [];
                     var eventsPromise = $scope.getEvents({minDate: minDate.day, maxDate: maxDate.day});
                     eventsPromise.then(function (events) {
-                        _.forEach(vm.dates.indices, function (index) {
-                            var day = vm.getDay(index);
-                            _.forEach(_.filter(vm.flattenedResources, {group: false}), function (resource) {
-                                var resourceIndexEvents = vm.getEventsDay(day, events[resource.id]);
-                                _.set(vm.events, [resource.id, index], resourceIndexEvents);
-                            });
-                        });
+                        vm.events = events;
                     });
                 }
             }
@@ -198,15 +168,22 @@ angular.module('angularPlanningApp')
                 vm.dates.current = $scope.currentDate.clone();
 
                 var days = [];
+                var months = [];
 
                 var day = {
                     day: null,
                     isToday: false,
                     isEndOfWeek: false
                 };
+                var lastMonth = {
+                    month: null,
+                    nbDaysDisplayed: 0
+                };
 
                 var currentDate = vm.dates.current.clone();
+                var month = currentDate.clone().startOf('month');
                 for (var i = 0; i < vm.nbDaysDisplayed; i++) {
+                    /* Compute day */
                     day = {
                         index: i,
                         day: currentDate.toDate(),
@@ -216,21 +193,29 @@ angular.module('angularPlanningApp')
                         isEndOfWeek: vm.isEndOfWeek(i)
                     };
                     days.push(day);
+                    /* Process month */
+                    if (month.isSame(lastMonth.month, 'month') === false) {
+                        lastMonth = {
+                            month: month.toDate(),
+                            monthName: month.format('MMMM YYYY'),
+                            nbDaysDisplayed: 1
+                        };
+                        months.push(lastMonth);
+                    } else {
+                        lastMonth.nbDaysDisplayed++;
+                    }
+
                     currentDate.add(1, 'days');
+                    month = currentDate.clone().startOf('month');
                 }
                 vm.dates.days = days;
+                vm.dates.months = months;
 
                 if ($scope.resources.length > 0) {
                     updateEvents();
                 }
 
                 vm.dates.indices = _.range(vm.nbDaysDisplayed);
-
-                vm.dates.months = getMonthsOfDays(vm.dates.days);
-            };
-
-            vm.highlightDayHovered = function (index) {
-                vm.dates.dayHovered = index;
             };
 
             $scope.$watch('planningWidth', function (newValue, oldValue) {
@@ -252,6 +237,66 @@ angular.module('angularPlanningApp')
                 }
             );
         }]
+    };
+});
+
+'use strict';
+
+angular.module('angularPlanningApp')
+
+.directive('highlightHoveredDay', function () {
+    function getElementById(id) {
+        /* eslint angular/document-service: 0 */
+        return angular.element(document.querySelector(id));
+    }
+
+    return function (scope, element, attr) {
+        element.on('mouseenter', function () {
+            getElementById('#day-number-' + attr.highlightHoveredDay).addClass('planning-day-hovered-cell');
+            getElementById('#day-weekdayname-' + attr.highlightHoveredDay).addClass('planning-day-hovered-cell');
+        });
+
+        element.on('mouseleave', function () {
+            getElementById('#day-number-' + attr.highlightHoveredDay).removeClass('planning-day-hovered-cell');
+            getElementById('#day-weekdayname-' + attr.highlightHoveredDay).removeClass('planning-day-hovered-cell');
+        });
+    };
+});
+
+'use strict';
+
+angular.module('angularPlanningApp')
+
+.directive('onMouseEnter', function () {
+    return function (scope, element, attr) {
+        element.on('mouseenter', function () {
+            scope.$eval(attr.onMouseEnter);
+        });
+    };
+});
+
+'use strict';
+
+angular.module('angularPlanningApp')
+
+.directive('onClick', function () {
+    return function (scope, element, attr) {
+        element.on('click', function (event) {
+            scope.$eval(attr.onClick);
+            event.stopPropagation();
+        });
+    };
+});
+
+'use strict';
+
+angular.module('angularPlanningApp')
+
+.directive('onMouseEnter', function () {
+    return function (scope, element, attr) {
+        element.on('mouseenter', function () {
+            scope.$eval(attr.onMouseEnter);
+        });
     };
 });
 
