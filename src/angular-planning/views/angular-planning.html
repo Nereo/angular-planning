@@ -12,7 +12,7 @@
                 <th class="planning-resources">&nbsp;</th>
                 <th id="day-number-{{ ::day.index }}" ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">
                     {{ ::day.dayNumber }}
-                    
+                    <div class="planning-end-of-week-bar" ng-show="day.isEndOfWeek"></div>
                 </th>
             </tr>
             <tr ng-if="showDayOfWeek">
@@ -28,7 +28,7 @@
                         {{ ::resource.name }}
                     </div>
                 </th>
-                <td class="planning-day-cell" ng-repeat="index in vm.dates.indices track by (resource.id + '-' + $index)" highlight-hovered-day="{{ ::index }}">
+                <td class="planning-day-cell" ng-repeat="index in vm.dates.indices track by (resource.id + '-' + $index)" highlight-hovered-day="{{ index }}">
                     <div class="planning-day-events" ng-if="!resource.group" on-mouse-enter="vm.onDayHover(index, resource)" on-click="vm.onDayClick(index, resource)">
                         <div class="planning-day-event" ng-repeat="event in vm.getEventsDay(index, resource.id) track by (resource.id + '-' + index + '-' + $index)" ng-style="{
                           background: vm.isMorningOnly(index, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(index, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" on-click="vm.onEventClick($event, event, index, resource)">
