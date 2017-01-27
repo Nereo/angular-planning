@@ -337,7 +337,7 @@ angular
                     startsAt: moment().add(2, 'days').toDate(),
                     endsAt: moment().add(5, 'days').toDate(),
                     color: 'red',
-                    pending: false,
+                    pending: true,
                     morningIncluded: true,
                     afternoonIncluded: false,
                     priority: 1

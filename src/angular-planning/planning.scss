@@ -9,6 +9,7 @@ $planning-end-of-week-bar-width: 4px;
 
 .planning-wrapper {
     position: relative;
+    overflow: hidden;
 }
 
 .planning-loading {
@@ -83,7 +84,7 @@ $planning-end-of-week-bar-width: 4px;
         overflow-y: auto;
         overflow-x: hidden;
         -ms-overflow-style: -ms-autohiding-scrollbar;
-        height: $planning-body-height;
+        max-height: $planning-body-height;
 
         tr:hover {
             th.planning-resources {
@@ -174,16 +175,14 @@ $planning-end-of-week-bar-width: 4px;
 
     .planning-day-event {
         position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
+        text-align: center;
+        line-height: $planning-row-height;
 
         i {
             font-size: 8px;
             position: relative;
-            left: 2px;
-            top: 4px;
         }
     }
 }
