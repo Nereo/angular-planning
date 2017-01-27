@@ -18,8 +18,9 @@ angular.module('angularPlanningApp')
         },
         templateUrl: 'angular-planning/views/angular-planning.html',
         controllerAs: 'vm',
-        controller: ['$scope', '$q', 'moment', '_', function PlanningController($scope, $q, moment, _) {
+        controller: ['$scope', '$q', '$cacheFactory', 'moment', '_', function PlanningController($scope, $q, $cacheFactory, moment, _) {
             var vm = this;
+            var dateIndexCache = $cacheFactory('planning-date-index-cache'); /* Store in cache dates for each index */
 
             /* Toggle groups */
             function toggleVisibility(resource, show) {
@@ -78,6 +79,9 @@ angular.module('angularPlanningApp')
 
             /* Dates utilities */
             vm.getDay = function (index) {
+                if (dateIndexCache.get(index)) {
+                    return dateIndexCache.get(index);
+                }
                 return vm.dates.current.clone().add(index, 'days');
             };
 
@@ -126,10 +130,8 @@ angular.module('angularPlanningApp')
             };
 
             vm.getEventsDay = function (index, resourceId) {
-                var day = vm.getDay(index);
-                return _.filter(vm.events[resourceId], function (event) {
-                    return day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day');
-                });
+                var dayKey = vm.getDay(index).format('YYYY-MM-DD');
+                return _.get(vm.events, [resourceId, dayKey], []);
             };
 
             /* Planning display */
@@ -150,12 +152,29 @@ angular.module('angularPlanningApp')
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
                     var eventsPromise = $scope.getEvents({minDate: minDate.day, maxDate: maxDate.day});
                     eventsPromise.then(function (events) {
-                        vm.events = events;
+                        vm.events = [];
+                        _.forEach(vm.dates.indices, function (index) {
+                            var day = vm.getDay(index);
+                            var dayKey = day.format('YYYY-MM-DD');
+                            _.forEach(events, function (resourceEvents, resourceId) {
+                                var resourceDayEvents = [];
+                                _.forEach(resourceEvents, function (event) {
+                                    if (day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day')) {
+                                        resourceDayEvents.push(event);
+                                    }
+                                });
+                                if (resourceDayEvents.length > 0) {
+                                    _.set(vm.events, [resourceId, dayKey], resourceDayEvents);
+                                }
+                            });
+                        });
                     });
                 }
             }
 
             vm.displayDates = function () {
+                dateIndexCache.removeAll(); /* Remove cache, as indices will change */
+
                 vm.dates.current = $scope.currentDate.clone();
 
                 var days = [];
@@ -195,6 +214,8 @@ angular.module('angularPlanningApp')
                     } else {
                         lastMonth.nbDaysDisplayed++;
                     }
+
+                    dateIndexCache.put(i, currentDate.clone());
 
                     currentDate.add(1, 'days');
                     month = currentDate.clone().startOf('month');
