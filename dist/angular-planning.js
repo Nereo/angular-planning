@@ -31,6 +31,11 @@ angular.module('angularPlanningApp')
             var vm = this;
             var dateIndexCache = $cacheFactory('planning-date-index-cache'); /* Store in cache dates for each index */
 
+            /* Destroy cache on directive destroy to prevent duplicate cache already taken exception */
+            $scope.$on('$destroy', function () {
+                dateIndexCache.destroy();
+            });
+
             /* Toggle groups */
             function toggleVisibility(resource, show) {
                 for (var i = 0; i < vm.flattenedResources.length; i++) {
