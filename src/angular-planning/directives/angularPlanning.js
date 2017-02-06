@@ -254,9 +254,8 @@ angular.module('angularPlanningApp')
                 }
             });
 
-            $window.matchMedia('print').addListener(function (matchMedia) {
+            $window.matchMedia('print').addListener(function () {
                 vm.displayDates();
-                initToggle(matchMedia.matches); /* Toggle all groups open if print */
             });
 
             $scope.$watch(
