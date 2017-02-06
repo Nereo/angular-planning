@@ -42,7 +42,7 @@
           </div>
       </div>
       <div ng-if="showPlanning">
-        <angular-planning current-date="vm.currentDate" resources="vm.resources" get-events="vm.getEvents()" on-day-hover="vm.onDayHover(day, resource)" on-day-click="vm.onDayClick(day, resource)" on-event-click="vm.onEventClick(event, day, resource)" cell-width="20" planning-resources-column-ratio="15" show-day-of-week="true"></angular-planning>
+        <angular-planning current-date="vm.currentDate" last-date="vm.lastDate" resources="vm.resources" get-events="vm.getEvents()" on-day-hover="vm.onDayHover(day, resource)" on-day-click="vm.onDayClick(day, resource)" on-event-click="vm.onEventClick(event, day, resource)" cell-width="20" planning-resources-column-ratio="15" show-day-of-week="true"></angular-planning>
       </div>
     </ng-controller>
   </body>

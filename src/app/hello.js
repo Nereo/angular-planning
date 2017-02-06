@@ -5,6 +5,8 @@ angular
         moment.locale('fr');
 
         vm.currentDate = moment();
+        vm.lastDate = moment().add(90, 'days');
+
         vm.addDays = function (nbDays) {
             vm.currentDate.add(nbDays, 'days');
         };

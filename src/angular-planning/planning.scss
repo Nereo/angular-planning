@@ -186,3 +186,22 @@ $planning-end-of-week-bar-width: 4px;
         }
     }
 }
+
+@media print {
+    .planning-wrapper, tbody {
+        overflow: visible;
+    }
+
+    .planning-table {
+        width: initial;
+
+        tbody {
+            max-height: initial;
+            height: initial;
+        }
+
+        th.planning-resources {
+            width: 150px;
+        }
+    }
+}

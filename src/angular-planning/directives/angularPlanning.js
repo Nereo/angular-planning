@@ -9,6 +9,7 @@ angular.module('angularPlanningApp')
             getEvents: '&',
             resources: '=',
             currentDate: '=',
+            lastDate: '=',
             cellWidth: '=',
             planningResourcesColumnRatio: '=',
             showDayOfWeek: '=',
@@ -18,7 +19,7 @@ angular.module('angularPlanningApp')
         },
         templateUrl: 'angular-planning/views/angular-planning.html',
         controllerAs: 'vm',
-        controller: ['$scope', '$q', '$cacheFactory', 'moment', '_', function PlanningController($scope, $q, $cacheFactory, moment, _) {
+        controller: ['$scope', '$q', '$cacheFactory', '$window', 'moment', '_', function PlanningController($scope, $q, $cacheFactory, $window, moment, _) {
             var vm = this;
             var dateIndexCache = $cacheFactory('planning-date-index-cache'); /* Store in cache dates for each index */
 
@@ -47,13 +48,13 @@ angular.module('angularPlanningApp')
                 }
             };
 
-            function initToggle() {
+            function initToggle(forceOpen) {
                 for (var i = 0; i < vm.flattenedResources.length; i++) {
                     if (vm.flattenedResources[i].group === true) {
                         if (vm.flattenedResources[i].parentGroup === null) {
                             vm.flattenedResources[i].show = true;
                         }
-                        vm.toggleFolding(vm.flattenedResources[i], vm.flattenedResources[i].open);
+                        vm.toggleFolding(vm.flattenedResources[i], forceOpen ? forceOpen : vm.flattenedResources[i].open);
                     }
                 }
             }
@@ -177,8 +178,20 @@ angular.module('angularPlanningApp')
                 }
             }
 
+            vm.computeNbDaysDisplayed = function () {
+                /* If we are printing, take into account the lastDate instead of device width */
+                if ($window.matchMedia('print').matches) {
+                    vm.nbDaysDisplayed = $scope.lastDate.clone().diff($scope.currentDate, 'days');
+                } else {
+                    vm.nbDaysDisplayed = _.floor(($scope.planningWidth * (1 - $scope.planningResourcesColumnRatio / 100)) / $scope.cellWidth);
+                }
+            };
+
             vm.displayDates = function () {
                 dateIndexCache.removeAll(); /* Remove cache, as indices will change */
+
+                vm.dates.indices = [];
+                vm.computeNbDaysDisplayed();
 
                 vm.dates.current = $scope.currentDate.clone();
 
@@ -237,10 +250,13 @@ angular.module('angularPlanningApp')
 
             $scope.$watch('planningWidth', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
-                    vm.nbDaysDisplayed = _.floor((newValue * (1 - $scope.planningResourcesColumnRatio / 100)) / $scope.cellWidth);
-                    vm.dates.indices = [];
                     vm.displayDates();
                 }
+            });
+
+            $window.matchMedia('print').addListener(function (matchMedia) {
+                vm.displayDates();
+                initToggle(matchMedia.matches); /* Toggle all groups open if print */
             });
 
             $scope.$watch(
