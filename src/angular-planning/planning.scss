@@ -196,8 +196,8 @@ $planning-end-of-week-bar-width: 4px;
         width: initial;
 
         tbody {
-            max-height: initial;
-            height: initial;
+            max-height: initial !important;
+            height: initial !important;
         }
 
         th.planning-resources {

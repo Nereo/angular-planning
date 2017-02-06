@@ -181,7 +181,7 @@ angular.module('angularPlanningApp')
             vm.computeNbDaysDisplayed = function () {
                 /* If we are printing, take into account the lastDate instead of device width */
                 if ($window.matchMedia('print').matches) {
-                    vm.nbDaysDisplayed = $scope.lastDate.clone().diff($scope.currentDate, 'days');
+                    vm.nbDaysDisplayed = $scope.lastDate.clone().diff($scope.currentDate, 'days') + 1;
                 } else {
                     vm.nbDaysDisplayed = _.floor(($scope.planningWidth * (1 - $scope.planningResourcesColumnRatio / 100)) / $scope.cellWidth);
                 }
