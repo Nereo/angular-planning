@@ -9,7 +9,7 @@ angular.module('angularPlanningApp')
             getEvents: '&',
             resources: '=',
             currentDate: '=',
-            lastDate: '=',
+            lastDate: '=?',
             cellWidth: '=',
             planningResourcesColumnRatio: '=',
             showDayOfWeek: '=',
@@ -179,9 +179,9 @@ angular.module('angularPlanningApp')
             }
 
             vm.computeNbDaysDisplayed = function () {
-                /* If we are printing, take into account the lastDate instead of device width */
-                if ($window.matchMedia('print').matches) {
-                    vm.nbDaysDisplayed = $scope.lastDate.clone().diff($scope.currentDate, 'days') + 1;
+                /* If we have last date, force the nbDaysDisplayed */
+                if ($scope.lastDate) {
+                    vm.nbDaysDisplayed = $scope.lastDate.diff($scope.currentDate, 'days') + 1;
                 } else {
                     vm.nbDaysDisplayed = _.floor(($scope.planningWidth * (1 - $scope.planningResourcesColumnRatio / 100)) / $scope.cellWidth);
                 }
@@ -190,7 +190,6 @@ angular.module('angularPlanningApp')
             vm.displayDates = function () {
                 dateIndexCache.removeAll(); /* Remove cache, as indices will change */
 
-                vm.dates.indices = [];
                 vm.computeNbDaysDisplayed();
 
                 vm.dates.current = $scope.currentDate.clone();
@@ -250,12 +249,9 @@ angular.module('angularPlanningApp')
 
             $scope.$watch('planningWidth', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
+                    vm.dates.indices = [];
                     vm.displayDates();
                 }
-            });
-
-            $window.matchMedia('print').addListener(function () {
-                vm.displayDates();
             });
 
             $scope.$watch(
