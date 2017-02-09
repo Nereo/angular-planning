@@ -305,6 +305,10 @@ angular.module('angularPlanningApp')
                     updateEventsResource(resourceId);
                 }
             });
+
+            $scope.$on("updatePlanning", function () {
+                updateEvents();
+            });
         }]
     };
 });
