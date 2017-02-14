@@ -269,6 +269,10 @@ angular.module('angularPlanningApp')
                     }
                 }
             );
+
+            $scope.$on('updatePlanning', function () {
+                updateEvents();
+            });
         }]
     };
 });
