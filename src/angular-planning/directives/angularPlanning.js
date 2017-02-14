@@ -182,7 +182,7 @@ angular.module('angularPlanningApp')
                         });
                     });
                 }
-            }, true);
+            });
 
             vm.computeNbDaysDisplayed = function () {
                 /* If we have last date, force the nbDaysDisplayed */

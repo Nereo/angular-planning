@@ -191,7 +191,7 @@ angular.module('angularPlanningApp')
                         });
                     });
                 }
-            }, true);
+            });
 
             vm.computeNbDaysDisplayed = function () {
                 /* If we have last date, force the nbDaysDisplayed */
@@ -310,18 +310,6 @@ angular.module('angularPlanningApp')
 
 angular.module('angularPlanningApp')
 
-.directive('onMouseEnter', function () {
-    return function (scope, element, attr) {
-        element.on('mouseenter', function () {
-            scope.$eval(attr.onMouseEnter);
-        });
-    };
-});
-
-'use strict';
-
-angular.module('angularPlanningApp')
-
 .directive('onClick', function () {
     return function (scope, element, attr) {
         element.on('click', function (event) {
@@ -347,65 +335,6 @@ angular.module('angularPlanningApp')
 
 angular.module('angularPlanningApp')
 
-// Refresh HTML with one time bindings by interpolating the HTML template and binding new watchers.
-.directive('oneTimeRefresh', ["$compile", "$interpolate", function ($compile, $interpolate) {
-    function copyLocalVariables(oldScope, newScope) {
-        angular.forEach(oldScope, function (val, key) {
-            if (key[0] !== '$') {
-                newScope[key] = val;
-            }
-        });
-    }
-
-    function removeChildrenWatchers(element) {
-        angular.forEach(element.children(), function (childElement) {
-            removeAllWatchers(angular.element(childElement));
-        });
-    }
-
-    function removeAllWatchers(element) {
-        if (element.data().hasOwnProperty('$scope')) {
-            element.data().$scope.$$watchers = [];
-        }
-        removeChildrenWatchers(element);
-    }
-
-    return {
-        scope: false,
-        compile: function ($el) {
-            var template;
-            var exp;
-
-            template = $el.html();
-            // Compile HTML template into an interpolation function.
-            exp = $interpolate(template);
-
-            return function (scope, $el, attrs) {
-                // Unique id for this row.
-                var itemId = attrs.id;
-                var el = $el;
-                el.closest('tbody').on('refresh-item-' + itemId, function () {
-                    // Remove all watchers from the old element and all its children.
-                    removeChildrenWatchers(el);
-
-                    var newScope = scope.$parent.$new();
-                    // Copy scope variables from the old root element (<tr> in our case).
-                    copyLocalVariables(scope, newScope);
-                    // Interpolate one time bindings with values and create.
-                    // Also create new watch expressions for ng-show, ng-href and so on.
-                    var html = $compile(exp(newScope))(newScope);
-                    el.html(html);
-                });
-            };
-        },
-        restrict: 'A'
-    };
-}]);
-
-'use strict';
-
-angular.module('angularPlanningApp')
-
 .directive('resizeDetect', ["_", "$window", function (_, $window) {
     return {
         restrict: 'A',
@@ -425,58 +354,3 @@ angular.module('angularPlanningApp')
         }
     };
 }]);
-
-'use strict';
-
-angular.module('angularPlanningApp')
-
-.directive('suspendable-watch', function () {
-    return {
-        link: function (scope) {
-            // Heads up: this might break is suspend/resume called out of order
-            // or if watchers are added while suspended
-            var watchers;
-
-            scope.$on('suspend', function () {
-                watchers = scope.$$watchers;
-                scope.$$watchers = [];
-            });
-
-            scope.$on('resume', function () {
-                if (watchers)
-                    scope.$$watchers = watchers;
-
-                // discard our copy of the watchers
-                watchers = void 0;
-            });
-        }
-    };
-});
-
-'use strict';
-
-angular.module('angularPlanningApp')
-
-.directive('suspendableWatch', function () {
-    return {
-        link: function (scope) {
-            // Heads up: this might break is suspend/resume called out of order
-            // or if watchers are added while suspended
-            var watchers;
-
-            scope.$on('suspend', function () {
-                watchers = scope.$$watchers;
-                scope.$$watchers = [];
-            });
-
-            scope.$on('resume', function () {
-                if (watchers) {
-                    scope.$$watchers = watchers;
-                }
-
-                // discard our copy of the watchers
-                watchers = undefined;
-            });
-        }
-    };
-});
