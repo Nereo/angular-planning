@@ -88,6 +88,16 @@ angular.module('angularPlanningApp')
             }
 
             $scope.$watchCollection('resources', function (resources) {
+                /* Activate watchers to reflect changes and disable them when DOM is finished */
+                $scope.$broadcast('resume');
+                $timeout(
+                    function () {
+                        $scope.$broadcast('suspend');
+                    },
+                    0,
+                    false
+                );
+
                 vm.flattenedResources = flattenResources(resources);
                 initToggle();
                 updateEvents();
@@ -201,12 +211,15 @@ angular.module('angularPlanningApp')
             };
 
             vm.displayDates = function () {
-
                 /* Activate watchers to reflect changes and disable them when DOM is finished */
                 $scope.$broadcast('resume');
-                $timeout(function(){
-                    $scope.$broadcast('suspend');
-                },0,false);
+                $timeout(
+                    function () {
+                        $scope.$broadcast('suspend');
+                    },
+                    0,
+                    false
+                );
 
                 dateIndexCache.removeAll(); /* Remove cache, as indices will change */
 
@@ -470,13 +483,11 @@ angular.module('angularPlanningApp')
             var watchers;
 
             scope.$on('suspend', function () {
-                console.log('suspend watch');
                 watchers = scope.$$watchers;
                 scope.$$watchers = [];
             });
 
             scope.$on('resume', function () {
-                console.log('resume watch');
                 if (watchers) {
                     scope.$$watchers = watchers;
                 }
