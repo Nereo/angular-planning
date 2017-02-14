@@ -164,12 +164,14 @@ angular.module('angularPlanningApp')
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
-                    $scope.updateEvents({minDate: minDate.day, maxDate: maxDate.day});
+                    $scope.updateEvents({minDate: minDate.day, maxDate: maxDate.day}).then(function () {
+                        $scope.$broadcast('updateEvents');
+                    });
                 }
             }
 
             vm.events = [];
-            $scope.$watchCollection('events', function (events) {
+            $scope.$on('updateEvents', function () {
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
@@ -178,7 +180,7 @@ angular.module('angularPlanningApp')
                     _.forEach(vm.dates.indices, function (index) {
                         var day = vm.getDay(index);
                         var dayKey = day.format('YYYY-MM-DD');
-                        _.forEach(events, function (event) {
+                        _.forEach($scope.events, function (event) {
                             if (day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day')) {
                                 _.set(
                                     vm.events,
@@ -189,7 +191,7 @@ angular.module('angularPlanningApp')
                         });
                     });
                 }
-            });
+            }, true);
 
             vm.computeNbDaysDisplayed = function () {
                 /* If we have last date, force the nbDaysDisplayed */
@@ -345,6 +347,65 @@ angular.module('angularPlanningApp')
 
 angular.module('angularPlanningApp')
 
+// Refresh HTML with one time bindings by interpolating the HTML template and binding new watchers.
+.directive('oneTimeRefresh', ["$compile", "$interpolate", function ($compile, $interpolate) {
+    function copyLocalVariables(oldScope, newScope) {
+        angular.forEach(oldScope, function (val, key) {
+            if (key[0] !== '$') {
+                newScope[key] = val;
+            }
+        });
+    }
+
+    function removeChildrenWatchers(element) {
+        angular.forEach(element.children(), function (childElement) {
+            removeAllWatchers(angular.element(childElement));
+        });
+    }
+
+    function removeAllWatchers(element) {
+        if (element.data().hasOwnProperty('$scope')) {
+            element.data().$scope.$$watchers = [];
+        }
+        removeChildrenWatchers(element);
+    }
+
+    return {
+        scope: false,
+        compile: function ($el) {
+            var template;
+            var exp;
+
+            template = $el.html();
+            // Compile HTML template into an interpolation function.
+            exp = $interpolate(template);
+
+            return function (scope, $el, attrs) {
+                // Unique id for this row.
+                var itemId = attrs.id;
+                var el = $el;
+                el.closest('tbody').on('refresh-item-' + itemId, function () {
+                    // Remove all watchers from the old element and all its children.
+                    removeChildrenWatchers(el);
+
+                    var newScope = scope.$parent.$new();
+                    // Copy scope variables from the old root element (<tr> in our case).
+                    copyLocalVariables(scope, newScope);
+                    // Interpolate one time bindings with values and create.
+                    // Also create new watch expressions for ng-show, ng-href and so on.
+                    var html = $compile(exp(newScope))(newScope);
+                    el.html(html);
+                });
+            };
+        },
+        restrict: 'A'
+    };
+}]);
+
+'use strict';
+
+angular.module('angularPlanningApp')
+
 .directive('resizeDetect', ["_", "$window", function (_, $window) {
     return {
         restrict: 'A',
@@ -364,3 +425,58 @@ angular.module('angularPlanningApp')
         }
     };
 }]);
+
+'use strict';
+
+angular.module('angularPlanningApp')
+
+.directive('suspendable-watch', function () {
+    return {
+        link: function (scope) {
+            // Heads up: this might break is suspend/resume called out of order
+            // or if watchers are added while suspended
+            var watchers;
+
+            scope.$on('suspend', function () {
+                watchers = scope.$$watchers;
+                scope.$$watchers = [];
+            });
+
+            scope.$on('resume', function () {
+                if (watchers)
+                    scope.$$watchers = watchers;
+
+                // discard our copy of the watchers
+                watchers = void 0;
+            });
+        }
+    };
+});
+
+'use strict';
+
+angular.module('angularPlanningApp')
+
+.directive('suspendableWatch', function () {
+    return {
+        link: function (scope) {
+            // Heads up: this might break is suspend/resume called out of order
+            // or if watchers are added while suspended
+            var watchers;
+
+            scope.$on('suspend', function () {
+                watchers = scope.$$watchers;
+                scope.$$watchers = [];
+            });
+
+            scope.$on('resume', function () {
+                if (watchers) {
+                    scope.$$watchers = watchers;
+                }
+
+                // discard our copy of the watchers
+                watchers = undefined;
+            });
+        }
+    };
+});

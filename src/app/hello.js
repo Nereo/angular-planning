@@ -359,7 +359,7 @@ angular
         ];
 
         vm.updateEvents = function (minDate) {
-            $timeout(
+            return $timeout(
                 function () {
                     vm.events.push({
                         resourceId: 4,
@@ -371,9 +371,15 @@ angular
                         afternoonIncluded: false,
                         priority: 1
                     });
-                    vm.events[0].morningIncluded = !vm.events[0].morningIncluded;
                 },
                 2000
             );
+        };
+
+        vm.updateSingleEvent = function () {
+            var colors = ['red', 'pink', 'yellow', 'blue', 'crimson', 'darkorange'];
+            vm.events[0].color = colors[Math.floor(Math.random() * colors.length)];
+            vm.events[0].endsAt = moment(vm.events[0].endsAt).add(1, 'days');
+            $scope.$broadcast('updateEvents');
         };
     });
