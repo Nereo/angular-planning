@@ -15,8 +15,8 @@ angular.module('angularPlanningApp')
     return {
         restrict: 'E',
         scope: {
-            getEvents: '&',
-            getEventsResource: '&?',
+            events: '=',
+            updateEvents: '&',
             resources: '=',
             currentDate: '=',
             lastDate: '=?',
@@ -160,58 +160,36 @@ angular.module('angularPlanningApp')
             vm.nbDaysDisplayed = 0;
             vm.planningWidth = 0;
 
-            vm.events = [];
             function updateEvents() {
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
-
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
-                    var eventsPromise = $scope.getEvents({minDate: minDate.day, maxDate: maxDate.day});
-                    eventsPromise.then(function (events) {
-                        vm.events = [];
-                        _.forEach(vm.dates.indices, function (index) {
-                            var day = vm.getDay(index);
-                            var dayKey = day.format('YYYY-MM-DD');
-                            _.forEach(events, function (resourceEvents, resourceId) {
-                                var resourceDayEvents = [];
-                                _.forEach(resourceEvents, function (event) {
-                                    if (day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day')) {
-                                        resourceDayEvents.push(event);
-                                    }
-                                });
-                                if (resourceDayEvents.length > 0) {
-                                    _.set(vm.events, [resourceId, dayKey], resourceDayEvents);
-                                }
-                            });
-                        });
-                    });
+                    $scope.updateEvents({minDate: minDate.day, maxDate: maxDate.day});
                 }
             }
 
-            function updateEventsResource(resourceId) {
+            vm.events = [];
+            $scope.$watchCollection('events', function (events) {
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
-                    var eventsPromise = $scope.getEventsResource({minDate: minDate.day, maxDate: maxDate.day, resourceId: resourceId});
-                    eventsPromise.then(function (events) {
-                        _.set(vm.events, resourceId, []);
-                        _.forEach(vm.dates.indices, function (index) {
-                            var day = vm.getDay(index);
-                            var dayKey = day.format('YYYY-MM-DD');
-                            var resourceDayEvents = [];
-                            _.forEach(events, function (event) {
-                                if (day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day')) {
-                                    resourceDayEvents.push(event);
-                                }
-                            });
-                            if (resourceDayEvents.length > 0) {
-                                _.set(vm.events, [resourceId, dayKey], resourceDayEvents);
+                    vm.events = [];
+                    _.forEach(vm.dates.indices, function (index) {
+                        var day = vm.getDay(index);
+                        var dayKey = day.format('YYYY-MM-DD');
+                        _.forEach(events, function (event) {
+                            if (day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day')) {
+                                _.set(
+                                    vm.events,
+                                    [event.resourceId, dayKey],
+                                    _.concat(_.get(vm.events, [event.resourceId, dayKey], []), event)
+                                );
                             }
                         });
                     });
                 }
-            }
+            });
 
             vm.computeNbDaysDisplayed = function () {
                 /* If we have last date, force the nbDaysDisplayed */
@@ -299,16 +277,6 @@ angular.module('angularPlanningApp')
                     }
                 }
             );
-
-            $scope.$on("updatePlanningResource", function (event, resourceId) {
-                if ($scope.getEventsResource) {
-                    updateEventsResource(resourceId);
-                }
-            });
-
-            $scope.$on("updatePlanning", function () {
-                updateEvents();
-            });
         }]
     };
 });

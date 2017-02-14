@@ -26,10 +26,6 @@ angular
             $log.log('Event clicked', event, day, resource);
         };
 
-        vm.updateResource = function () {
-            $scope.$broadcast('updatePlanningResource', 4);
-        };
-
         vm.resources = [];
         vm.getResourcesAsync = function () {
             $timeout(function () {
@@ -326,63 +322,58 @@ angular
         };
         vm.getResourcesAsync();
 
-        var events = {
-            4: [
-                {
-                    id: 123,
-                    startsAt: moment().toDate(),
-                    endsAt: moment().add(7, 'days').toDate(),
-                    color: 'yellow',
-                    pending: false,
-                    morningIncluded: true,
-                    afternoonIncluded: false,
-                    priority: 1
+        vm.events = [
+            {
+                resourceId: 4,
+                id: 123,
+                startsAt: moment().toDate(),
+                endsAt: moment().add(7, 'days').toDate(),
+                color: 'yellow',
+                pending: false,
+                morningIncluded: true,
+                afternoonIncluded: false,
+                priority: 1
+            },
+            {
+                resourceId: 4,
+                id: 456,
+                startsAt: moment().add(2, 'days').toDate(),
+                endsAt: moment().add(5, 'days').toDate(),
+                color: 'red',
+                pending: true,
+                morningIncluded: true,
+                afternoonIncluded: false,
+                priority: 1
+            },
+            {
+                resourceId: 5,
+                id: 789,
+                startsAt: moment().toDate(),
+                endsAt: moment().add(7, 'days').toDate(),
+                color: 'pink',
+                pending: false,
+                morningIncluded: true,
+                afternoonIncluded: true,
+                priority: 1
+            }
+        ];
+
+        vm.updateEvents = function (minDate) {
+            $timeout(
+                function () {
+                    vm.events.push({
+                        resourceId: 4,
+                        startsAt: moment(minDate).add(2, 'days').toDate(),
+                        endsAt: moment(minDate).add(5, 'days').toDate(),
+                        color: 'red',
+                        pending: true,
+                        morningIncluded: true,
+                        afternoonIncluded: false,
+                        priority: 1
+                    });
+                    vm.events[0].morningIncluded = !vm.events[0].morningIncluded;
                 },
-                {
-                    id: 456,
-                    startsAt: moment().add(2, 'days').toDate(),
-                    endsAt: moment().add(5, 'days').toDate(),
-                    color: 'red',
-                    pending: true,
-                    morningIncluded: true,
-                    afternoonIncluded: false,
-                    priority: 1
-                }
-
-            ],
-            5: [
-                {
-                    id: 789,
-                    startsAt: moment().toDate(),
-                    endsAt: moment().add(7, 'days').toDate(),
-                    color: 'pink',
-                    pending: false,
-                    morningIncluded: true,
-                    afternoonIncluded: true,
-                    priority: 1
-                }
-            ]
-        };
-        vm.getEvents = function () {
-            var eventsPromise = $q.defer();
-
-            $timeout(function () {
-                eventsPromise.resolve(events);
-            }, 1000);
-
-            return eventsPromise.promise;
-        };
-
-        vm.getEventsResource = function (minDate, maxDate, resourceId) {
-            var eventsPromise = $q.defer();
-
-            $timeout(function () {
-                events[resourceId][0].startsAt = moment(events[resourceId][0].startsAt).add(10, 'days').toDate();
-                events[resourceId][0].endsAt = moment(events[resourceId][0].endsAt).add(10, 'days').toDate();
-                events[resourceId][0].color = 'purple';
-                eventsPromise.resolve(events[resourceId]);
-            }, 2000);
-
-            return eventsPromise.promise;
+                2000
+            );
         };
     });
