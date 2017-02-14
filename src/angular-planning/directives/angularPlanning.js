@@ -6,7 +6,6 @@ angular.module('angularPlanningApp')
     return {
         restrict: 'E',
         scope: {
-            events: '=',
             updateEvents: '&',
             resources: '=',
             currentDate: '=',
@@ -155,14 +154,14 @@ angular.module('angularPlanningApp')
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
-                    $scope.updateEvents({minDate: minDate.day, maxDate: maxDate.day}).then(function () {
-                        $scope.$broadcast('updateEvents');
+                    $scope.updateEvents({minDate: minDate.day, maxDate: maxDate.day}).then(function (events) {
+                        $scope.$broadcast('updateEvents', events);
                     });
                 }
             }
 
             vm.events = [];
-            $scope.$on('updateEvents', function () {
+            $scope.$on('updateEvents', function (e, events) {
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
@@ -171,7 +170,7 @@ angular.module('angularPlanningApp')
                     _.forEach(vm.dates.indices, function (index) {
                         var day = vm.getDay(index);
                         var dayKey = day.format('YYYY-MM-DD');
-                        _.forEach($scope.events, function (event) {
+                        _.forEach(events, function (event) {
                             if (day.isSameOrAfter(moment(event.startsAt), 'day') && day.isSameOrBefore(moment(event.endsAt), 'day')) {
                                 _.set(
                                     vm.events,

@@ -358,19 +358,10 @@ angular
             }
         ];
 
-        vm.updateEvents = function (minDate) {
+        vm.updateEvents = function () {
             return $timeout(
                 function () {
-                    vm.events.push({
-                        resourceId: 4,
-                        startsAt: moment(minDate).add(2, 'days').toDate(),
-                        endsAt: moment(minDate).add(5, 'days').toDate(),
-                        color: 'red',
-                        pending: true,
-                        morningIncluded: true,
-                        afternoonIncluded: false,
-                        priority: 1
-                    });
+                    return vm.events;
                 },
                 2000
             );
@@ -380,6 +371,6 @@ angular
             var colors = ['red', 'pink', 'yellow', 'blue', 'crimson', 'darkorange'];
             vm.events[0].color = colors[Math.floor(Math.random() * colors.length)];
             vm.events[0].endsAt = moment(vm.events[0].endsAt).add(1, 'days');
-            $scope.$broadcast('updateEvents');
+            $scope.$broadcast('updateEvents', vm.events);
         };
     });
