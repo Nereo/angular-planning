@@ -6,31 +6,31 @@
         <thead class="planning-table-header">
             <tr>
                 <th class="planning-resources">&nbsp;</th>
-                <th class="planning-month" suspendable-watch ng-repeat="month in vm.dates.months track by month.month" ng-attr-colspan="{{ month.nbDaysDisplayed }}">{{ ::month.monthName }}</th>
+                <th class="planning-month" ng-repeat="month in vm.dates.months track by month.month" ng-attr-colspan="{{ month.nbDaysDisplayed }}">{{ ::month.monthName }}</th>
             </tr>
             <tr>
                 <th class="planning-resources">&nbsp;</th>
-                <th id="day-number-{{ day.index }}" suspendable-watch ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">
+                <th id="day-number-{{ day.index }}" ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">
                     {{ ::day.dayNumber }}
                     <div class="planning-end-of-week-bar" ng-show="day.isEndOfWeek"></div>
                 </th>
             </tr>
             <tr ng-if="showDayOfWeek">
                 <th class="planning-resources">&nbsp;</th>
-                <th id="day-weekdayname-{{ day.index }}" suspendable-watch ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">{{ ::day.weekDayName }}</th>
+                <th id="day-weekdayname-{{ day.index }}" ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">{{ ::day.weekDayName }}</th>
             </tr>
         </thead>
         <tbody>
-            <tr suspendable-watch ng-repeat="resource in vm.flattenedResources track by (resource.parentGroup + '-' + resource.id)" ng-class="{'planning-group-row': resource.group}" ng-if="resource.show" ng-click="vm.toggleFolding(resource, !resource.open)">
+            <tr ng-repeat="resource in vm.flattenedResources track by (resource.parentGroup + '-' + resource.id)" ng-class="{'planning-group-row': resource.group}" ng-if="resource.show" ng-click="vm.toggleFolding(resource, !resource.open)">
                 <th class="planning-resources" ng-class="{'planning-group-toggle': resource.group}">
                     <div class="planning-resource-name" ng-class="{'planning-resource-person': !resource.group}" ng-style="{'padding-left': ((resource.depth + 1) * resource.group * 10) + 'px'}">
                         <i class="fa" ng-if="resource.group" ng-class="{'fa-caret-down': resource.open, 'fa-caret-right': !resource.open}"></i>
                         {{ ::resource.name }}
                     </div>
                 </th>
-                <td class="planning-day-cell" suspendable-watch ng-repeat="index in vm.dates.indices track by (resource.id + '-' + $index)" highlight-hovered-day="{{ ::index }}">
+                <td class="planning-day-cell" ng-repeat="index in vm.dates.indices track by (resource.id + '-' + $index)" highlight-hovered-day="{{ ::index }}">
                     <div class="planning-day-events" ng-if="!resource.group" on-mouse-enter="vm.onDayHover(index, resource)" on-click="vm.onDayClick(index, resource)">
-                        <div class="planning-day-event" suspendable-watch ng-repeat="event in vm.getEventsDay(index, resource.id) track by (resource.id + '-' + index + '-' + $index)" ng-style="{
+                        <div class="planning-day-event" ng-repeat="event in vm.getEventsDay(index, resource.id) track by (resource.id + '-' + index + '-' + $index)" ng-style="{
                           background: vm.isMorningOnly(index, event) ? 'linear-gradient(to right bottom, ' + event.color + ' 50%, rgba(255, 255, 255, 0) 50%)' : (vm.isAfternoonOnly(index, event) ? 'linear-gradient(to right bottom, rgba(255, 255, 255, 0) 50%, ' + event.color + ' 50%)' : event.color) }" on-click="vm.onEventClick($event, event, index, resource)">
                             <i class="fa fa-hourglass-half" ng-if="event.pending"></i>
                         </div>
