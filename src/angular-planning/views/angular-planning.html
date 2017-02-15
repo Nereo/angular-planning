@@ -6,18 +6,18 @@
         <thead class="planning-table-header">
             <tr>
                 <th class="planning-resources">&nbsp;</th>
-                <th class="planning-month" ng-repeat="month in vm.dates.months track by month.month" ng-attr-colspan="{{ month.nbDaysDisplayed }}">{{ ::month.monthName }}</th>
+                <th class="planning-month" viewport-watch ng-repeat="month in vm.dates.months track by month.month" ng-attr-colspan="{{ month.nbDaysDisplayed }}">{{ ::month.monthName }}</th>
             </tr>
             <tr>
                 <th class="planning-resources">&nbsp;</th>
-                <th id="day-number-{{ day.index }}" ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">
+                <th id="day-number-{{ day.index }}" viewport-watch ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">
                     {{ ::day.dayNumber }}
                     <div class="planning-end-of-week-bar" ng-show="day.isEndOfWeek"></div>
                 </th>
             </tr>
             <tr ng-if="showDayOfWeek">
                 <th class="planning-resources">&nbsp;</th>
-                <th id="day-weekdayname-{{ day.index }}" ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">{{ ::day.weekDayName }}</th>
+                <th id="day-weekdayname-{{ day.index }}" viewport-watch ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">{{ ::day.weekDayName }}</th>
             </tr>
         </thead>
         <tbody>
