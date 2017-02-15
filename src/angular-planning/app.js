@@ -2,7 +2,7 @@ var moment;
 var _;
 
 angular
-  .module('angularPlanningApp', [])
+  .module('angularPlanningApp', ['angularViewportWatch'])
   .constant('moment', moment)
   .constant('_', _)
 ;

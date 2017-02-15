@@ -19,7 +19,7 @@ angular.module('angularPlanningApp')
         },
         templateUrl: 'angular-planning/views/angular-planning.html',
         controllerAs: 'vm',
-        controller: ['$scope', '$q', '$cacheFactory', '$window', 'moment', '_', function PlanningController($scope, $q, $cacheFactory, $window, moment, _) {
+        controller: ['$scope', '$q', '$cacheFactory', '$window', '$timeout', 'moment', '_', function PlanningController($scope, $q, $cacheFactory, $window, $timeout, moment, _) {
             var vm = this;
             var dateIndexCache = $cacheFactory('planning-date-index-cache'); /* Store in cache dates for each index */
 
@@ -165,6 +165,11 @@ angular.module('angularPlanningApp')
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
+                $scope.$broadcast('toggleWatchers', true);
+                $timeout(function () {
+                    $scope.$broadcast('toggleWatchers', false);
+                }, 0);
+
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
                     vm.events = [];
                     _.forEach(vm.dates.indices, function (index) {
@@ -194,6 +199,11 @@ angular.module('angularPlanningApp')
 
             vm.displayDates = function () {
                 dateIndexCache.removeAll(); /* Remove cache, as indices will change */
+
+                $scope.$broadcast('toggleWatchers', true);
+                $timeout(function () {
+                    $scope.$broadcast('toggleWatchers', false);
+                }, 0);
 
                 vm.computeNbDaysDisplayed();
 
