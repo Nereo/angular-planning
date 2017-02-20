@@ -13,6 +13,7 @@ angular.module('angularPlanningApp')
             cellWidth: '=',
             planningResourcesColumnRatio: '=',
             showDayOfWeek: '=',
+            onPersonClick: '&?',
             onDayHover: '&?',
             onDayClick: '&?',
             onEventClick: '&?'
@@ -120,6 +121,12 @@ angular.module('angularPlanningApp')
                 },
                 250
             );
+
+            vm.onPersonClick = function (resource) {
+                if ($scope.onPersonClick && !resource.group) {
+                    $scope.onPersonClick({resource: resource});
+                }
+            };
 
             vm.onDayClick = function (index, resource) {
                 if ($scope.onDayClick && !resource.group) {
