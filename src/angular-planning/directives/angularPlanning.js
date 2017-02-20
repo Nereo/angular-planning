@@ -122,8 +122,11 @@ angular.module('angularPlanningApp')
                 250
             );
 
-            vm.onPersonClick = function (resource) {
-                if ($scope.onPersonClick && !resource.group) {
+            vm.onResourceClick = function (resource) {
+                if (resource.group) {
+                    vm.toggleFolding(resource, !resource.open);
+                    $scope.$apply();
+                } else if ($scope.onPersonClick) {
                     $scope.onPersonClick({resource: resource});
                 }
             };
