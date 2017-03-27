@@ -2,7 +2,7 @@ var moment;
 var _;
 
 angular
-  .module('angularPlanningApp', ['angularViewportWatch'])
+  .module('angularPlanningApp', ['angularViewportWatch', 'ui.slimscroll'])
   .constant('moment', moment)
   .constant('_', _)
 ;

@@ -11,6 +11,7 @@ angular.module('angularPlanningApp')
             currentDate: '=',
             lastDate: '=?',
             cellWidth: '=',
+            bodyHeight: '=',
             planningResourcesColumnRatio: '=',
             showDayOfWeek: '=',
             onPersonClick: '&?',

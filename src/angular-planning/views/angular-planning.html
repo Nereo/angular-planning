@@ -20,7 +20,7 @@
                 <th id="day-weekdayname-{{ day.index }}" viewport-watch ng-repeat="day in vm.dates.days track by day.day" ng-class="{'planning-today-cell': day.isToday}">{{ ::day.weekDayName }}</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody slimscroll="{height: bodyHeight}">
             <tr viewport-watch ng-repeat="resource in vm.flattenedResources track by (resource.parentGroup + '-' + resource.id)" ng-class="{'planning-group-row': resource.group}" ng-if="resource.show" on-click="vm.onResourceClick(resource)">
                 <th class="planning-resources" ng-class="{'planning-group-toggle': resource.group}">
                     <div class="planning-resource-name" ng-class="{'planning-resource-person': !resource.group}" ng-style="{'padding-left': ((resource.depth + 1) * resource.group * 10) + 'px'}">
