@@ -10,6 +10,7 @@ $planning-end-of-week-bar-width: 4px;
 .planning-wrapper {
     position: relative;
     overflow: hidden;
+    background-color: lightgrey;
 }
 
 .planning-loading {
@@ -46,12 +47,13 @@ $planning-end-of-week-bar-width: 4px;
         height: $planning-row-height;
         border: 1px solid $planning-border-color;
         border-width: 1px 0 0 1px;
-        background-color: transparent;
+        background-color: white;
     }
 
     thead {
         display: block;
         width: 100%;
+        background-color: white;
 
         tr {
 
@@ -157,7 +159,7 @@ $planning-end-of-week-bar-width: 4px;
         position: absolute;
         top: $planning-row-height;
         width: $planning-end-of-week-bar-width;
-        height: 100%;
+        height: 540px;
         margin-left: $planning-cell-width - $planning-end-of-week-bar-width / 2;
         background-color: $planning-hover-color;
         z-index: 1;
