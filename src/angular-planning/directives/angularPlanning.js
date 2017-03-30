@@ -11,7 +11,7 @@ angular.module('angularPlanningApp')
             currentDate: '=',
             lastDate: '=?',
             cellWidth: '=',
-            bodyHeight: '=',
+            maxBodyHeight: '=',
             planningResourcesColumnRatio: '=',
             showDayOfWeek: '=',
             onPersonClick: '&?',
@@ -83,6 +83,7 @@ angular.module('angularPlanningApp')
                 vm.flattenedResources = flattenResources(resources);
                 initToggle();
                 updateEvents();
+                $scope.bodyHeight = Math.min($scope.maxBodyHeight, vm.flattenedResources.length * 20);
             });
 
             /* Dates utilities */
