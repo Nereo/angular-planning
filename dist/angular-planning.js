@@ -65,7 +65,10 @@ angular.module('angularPlanningApp')
                 vm.resources = resources;
                 initToggle();
                 updateEvents();
-                $scope.bodyHeight = Math.min($scope.maxBodyHeight, vm.resources.length * 20);
+                var nbPersons = _.sumBy(vm.resources, function (r) {
+                    return r.members.length;
+                });
+                $scope.bodyHeight = Math.min($scope.maxBodyHeight, (vm.resources.length + nbPersons) * 20);
             });
 
             /* Dates utilities */
