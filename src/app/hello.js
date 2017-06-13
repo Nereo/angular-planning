@@ -42,7 +42,7 @@ angular
                         parent: null,
                         managers: [],
                         members: [],
-                        open: true
+                        open: false
                     },
                     {
                         id: 11,
@@ -53,7 +53,7 @@ angular
                         parent: 1,
                         managers: [],
                         members: [],
-                        open: true
+                        open: false
                     },
                     {
                         id: 111,
