@@ -42,6 +42,7 @@ angular.module('angularPlanningApp')
                     }
                 }
                 toggledResource.show = _.get(_.find(vm.resources, {id: toggledResource.parent}), 'open', true);
+                console.log(toggledResource, toggledResource.show);
                 toggledResource.open = open;
             };
 
