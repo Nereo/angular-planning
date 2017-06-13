@@ -68,7 +68,7 @@ angular.module('angularPlanningApp')
                 var nbPersons = _.sumBy(vm.resources, function (r) {
                     return r.members.length;
                 });
-                $scope.bodyHeight = Math.min($scope.maxBodyHeight, (vm.resources.length + nbPersons) * 20);
+                $scope.bodyHeight = Math.min($scope.maxBodyHeight, (vm.resources.length + nbPersons) * 21);
             });
 
             /* Dates utilities */
