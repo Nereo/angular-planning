@@ -40,59 +40,32 @@ angular.module('angularPlanningApp')
             });
 
             /* Toggle groups */
-            function toggleVisibility(resource, show) {
-                for (var i = 0; i < vm.flattenedResources.length; i++) {
-                    var currentResource = vm.flattenedResources[i];
-                    if (currentResource.parentGroup === resource.id) {
-                        currentResource.show = show;
-                        if (currentResource.group === true && currentResource.open === true) {
-                            toggleVisibility(currentResource, show);
-                        }
+            vm.toggleFolding = function (toggledResource, open) {
+                var toggledResourceIndex = _.findIndex(vm.resources, {id: toggledResource.id});
+                for (var i = toggledResourceIndex + 1; i < vm.resources.length; i++) {
+                    var currentResource = vm.resources[i];
+                    if (currentResource.tree_id === toggledResource.tree_id && currentResource.level > toggledResource.level) {
+                        currentResource.show = open;
+                    } else {
+                        break;
                     }
                 }
-            }
-
-            vm.toggleFolding = function (group, open) {
-                if (group.group === true) {
-                    toggleVisibility(group, open);
-                    group.open = open;
-                }
+                toggledResource.open = open;
             };
 
-            function initToggle(forceOpen) {
-                for (var i = 0; i < vm.flattenedResources.length; i++) {
-                    if (vm.flattenedResources[i].group === true) {
-                        if (vm.flattenedResources[i].parentGroup === null) {
-                            vm.flattenedResources[i].show = true;
-                        }
-                        vm.toggleFolding(vm.flattenedResources[i], forceOpen ? forceOpen : vm.flattenedResources[i].open);
-                    }
-                }
+            function initToggle() {
+                _.map(vm.resources, function (resource) {
+                    resource.show = true;
+                    vm.toggleFolding(resource, resource.open);
+                });
             }
 
             /* Handle resources */
-            vm.flattenedResources = [];
-            function flattenResources(resources) {
-                var _flattenResources = function (resources, parentGroupId, depth) {
-                    return _.flatMap(resources, function (resource) {
-                        resource.parentGroup = parentGroupId;
-                        resource.depth = depth;
-                        if (resource.children) {
-                            resource.group = true;
-                            return _.concat(resource, _flattenResources(resource.children, resource.id, depth + 1));
-                        }
-                        resource.group = false;
-                        return [resource];
-                    });
-                };
-                return _flattenResources(resources, null, 0);
-            }
-
             $scope.$watchCollection('resources', function (resources) {
-                vm.flattenedResources = flattenResources(resources);
+                vm.resources = resources;
                 initToggle();
                 updateEvents();
-                $scope.bodyHeight = Math.min($scope.maxBodyHeight, vm.flattenedResources.length * 20);
+                $scope.bodyHeight = Math.min($scope.maxBodyHeight, vm.resources.length * 20);
             });
 
             /* Dates utilities */
@@ -134,23 +107,26 @@ angular.module('angularPlanningApp')
             );
 
             vm.onResourceClick = function (resource) {
-                if (resource.group) {
+                $scope.$apply(function () {
                     vm.toggleFolding(resource, !resource.open);
-                    $scope.$apply();
-                } else if ($scope.onPersonClick) {
-                    $scope.onPersonClick({resource: resource});
+                });
+            };
+
+            vm.onPersonClick = function (person) {
+                if ($scope.onPersonClick) {
+                    $scope.onPersonClick({resource: person});
                 }
             };
 
             vm.onDayClick = function (index, resource) {
-                if ($scope.onDayClick && !resource.group) {
+                if ($scope.onDayClick) {
                     var day = vm.getDay(index).toDate();
                     $scope.onDayClick({day: day, resource: resource});
                 }
             };
 
             vm.onEventClick = function ($event, event, index, resource) {
-                if ($scope.onEventClick && !resource.group) {
+                if ($scope.onEventClick) {
                     var day = vm.getDay(index).toDate();
                     $scope.onEventClick({event: event, day: day, resource: resource});
                 }
@@ -186,11 +162,6 @@ angular.module('angularPlanningApp')
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
-                $scope.$broadcast('toggleWatchers', true);
-                $timeout(function () {
-                    $scope.$broadcast('toggleWatchers', false);
-                }, 0);
-
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
                     vm.events = [];
                     _.forEach(vm.dates.indices, function (index) {
@@ -220,11 +191,6 @@ angular.module('angularPlanningApp')
 
             vm.displayDates = function () {
                 dateIndexCache.removeAll(); /* Remove cache, as indices will change */
-
-                $scope.$broadcast('toggleWatchers', true);
-                $timeout(function () {
-                    $scope.$broadcast('toggleWatchers', false);
-                }, 0);
 
                 vm.computeNbDaysDisplayed();
 

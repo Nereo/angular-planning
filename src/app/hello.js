@@ -25,6 +25,9 @@ angular
         vm.onEventClick = function (event, day, resource) {
             $log.log('Event clicked', event, day, resource);
         };
+        vm.onPersonClick = function (resource) {
+            $log.log('Person clicked', resource);
+        };
 
         vm.resources = [];
         vm.getResourcesAsync = function () {
@@ -33,289 +36,96 @@ angular
                     {
                         id: 1,
                         name: 'TV Series',
-                        open: true,
-                        children: [
-                            {
-                                id: 2,
-                                name: 'Game of Thrones',
-                                open: true,
-                                children: [
-                                    {
-                                        id: 3,
-                                        name: 'Stark',
-                                        open: true,
-                                        children: [
-                                            {
-                                                id: 4,
-                                                name: 'Jon Snow'
-                                            },
-                                            {
-                                                id: 5,
-                                                name: 'Sansa Stark'
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        id: 6,
-                                        name: 'Targaryen',
-                                        open: true,
-                                        children: [
-                                            {
-                                                id: 7,
-                                                name: 'Daenerys Targaryen',
-                                                events: []
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                id: 7,
-                                name: 'Big Bang Theory',
-                                open: true,
-                                children: [
-                                    {
-                                        id: 8,
-                                        name: 'Sheldon Cooper'
-                                    },
-                                    {
-                                        id: 9,
-                                        name: 'Howard Wolowitz'
-                                    }
-                                ]
-                            }
-                        ]
+                        order: 0,
+                        level: 0,
+                        tree_id: 1,
+                        parent: null,
+                        managers: [],
+                        members: [],
+                        open: true
                     },
                     {
-                        id: 10,
-                        name: 'Movies',
-                        open: false,
-                        children: [
+                        id: 11,
+                        name: 'Game of Thrones',
+                        order: 0,
+                        level: 1,
+                        tree_id: 1,
+                        parent: 1,
+                        managers: [],
+                        members: [],
+                        open: true
+                    },
+                    {
+                        id: 111,
+                        name: 'Stark',
+                        order: 0,
+                        level: 2,
+                        tree_id: 1,
+                        parent: 11,
+                        managers: [],
+                        members: [
                             {
-                                id: 11,
-                                name: 'Han Solo'
+                                id: 1,
+                                name: 'Jon Snow'
+                            },
+                            {
+                                id: 2,
+                                name: 'Sansa Stark'
                             }
-                        ]
+                        ],
+                        open: true
+                    },
+                    {
+                        id: 112,
+                        name: 'Targaryen',
+                        order: 1,
+                        level: 2,
+                        tree_id: 1,
+                        parent: 11,
+                        managers: [],
+                        members: [
+                            {
+                                id: 3,
+                                name: 'Daenerys Targaryen'
+                            }
+                        ],
+                        open: true
                     },
                     {
                         id: 12,
-                        name: 'Movies',
-                        open: false,
-                        children: [
+                        name: 'Big Bang Theory',
+                        order: 0,
+                        level: 1,
+                        tree_id: 1,
+                        parent: 1,
+                        managers: [],
+                        members: [
                             {
-                                id: 13,
-                                name: 'Han Solo'
+                                id: 4,
+                                name: 'Sheldon Cooper'
+                            },
+                            {
+                                id: 5,
+                                name: 'Howard Wolowitz'
                             }
-                        ]
+                        ],
+                        open: true
                     },
                     {
-                        id: 14,
+                        id: 2,
                         name: 'Movies',
-                        open: false,
-                        children: [
+                        order: 0,
+                        level: 0,
+                        tree_id: 2,
+                        parent: null,
+                        managers: [],
+                        members: [
                             {
-                                id: 15,
+                                id: 6,
                                 name: 'Han Solo'
                             }
-                        ]
-                    },
-                    {
-                        id: 16,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 17,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 18,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 19,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 20,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 21,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 22,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 23,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 24,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 25,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 26,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 27,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 28,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 29,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 30,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 31,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 32,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 33,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 34,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 35,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 36,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 37,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 38,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 39,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 40,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 41,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 42,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 43,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 44,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 45,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 46,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 47,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 48,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 49,
-                                name: 'Han Solo'
-                            }
-                        ]
-                    },
-                    {
-                        id: 50,
-                        name: 'Movies',
-                        open: false,
-                        children: [
-                            {
-                                id: 51,
-                                name: 'Han Solo'
-                            }
-                        ]
+                        ],
+                        open: false
                     }
                 ];
             }, 1000);
