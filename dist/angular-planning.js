@@ -50,12 +50,12 @@ angular.module('angularPlanningApp')
                         break;
                     }
                 }
+                toggledResource.show = _.get(_.find(vm.resources, {id: toggledResource.parent}), 'open', true);
                 toggledResource.open = open;
             };
 
             function initToggle() {
                 _.map(vm.resources, function (resource) {
-                    resource.show = true;
                     vm.toggleFolding(resource, resource.open);
                 });
             }
@@ -162,6 +162,11 @@ angular.module('angularPlanningApp')
                 var minDate = vm.dates.days[0];
                 var maxDate = vm.dates.days[vm.dates.days.length - 1];
 
+                $scope.$broadcast('toggleWatchers', true);
+                $timeout(function () {
+                    $scope.$broadcast('toggleWatchers', false);
+                }, 0);
+
                 if (_.isUndefined(minDate) === false && _.isUndefined(maxDate) === false) {
                     vm.events = [];
                     _.forEach(vm.dates.indices, function (index) {
@@ -191,6 +196,11 @@ angular.module('angularPlanningApp')
 
             vm.displayDates = function () {
                 dateIndexCache.removeAll(); /* Remove cache, as indices will change */
+
+                $scope.$broadcast('toggleWatchers', true);
+                $timeout(function () {
+                    $scope.$broadcast('toggleWatchers', false);
+                }, 0);
 
                 vm.computeNbDaysDisplayed();
 
